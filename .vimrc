@@ -22,6 +22,9 @@ set numberwidth=5
 set showtabline=2
 set winwidth=79
 
+" Hide tab bar
+set showtabline=0
+
 " Prevent Vim from clobbering the scrollback buffer. See
 " http://www.shallowsky.com/linux/noaltscreen.html
 set t_ti= t_te=
@@ -58,7 +61,7 @@ call pathogen#runtime_append_all_bundles()
 "colorscheme solarized
 
 set showmode                      " Display the mode you're in.
-set guifont=Inconsolata:h16
+set guifont=Inconsolata:h18
 set number
 
 set smartindent
@@ -172,7 +175,6 @@ let g:rbpt_colorpairs = [
 let g:rbpt_max = 16
 
 set laststatus=2 " Always show the statusline
-let g:Powerline_symbols = 'fancy'
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " OPEN FILES IN DIRECTORY OF CURRENT FILE
@@ -187,3 +189,22 @@ map <leader>v :view %%
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 command! InsertTime :normal a<c-r>=strftime('%F %H:%M:%S.0 %z')<cr>
 nnoremap ,cd :lcd %:p:h<CR>:pwd<CR>
+" <Ctrl-l> redraws the screen and removes any search highlighting.
+nnoremap <silent> <C-l> :nohl<CR><C-l>
+
+" Reselect visual block after indent/outdent
+vnoremap < <gv
+vnoremap > >gv
+
+" Clear search highlights
+noremap <silent><Leader>/ :nohls<CR>
+
+" Keep search pattern at the center of the screen.
+nnoremap <silent> n nzz
+nnoremap <silent> N Nzz
+nnoremap <silent> * *zz
+nnoremap <silent> # #zz
+nnoremap <silent> g* g*zz
+nnoremap <silent> g# g#zz
+
+let g:ctrlp_working_path_mode = 'ra'

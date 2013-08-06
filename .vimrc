@@ -5,10 +5,10 @@ set hidden
 set history=10000
 set expandtab
 set tabstop=2
-set shiftwidth=4
+set shiftwidth=2
 set softtabstop=2
 set autoindent
-set laststatus=2
+set laststatus=2 " Always show the statusline
 set showmatch
 set incsearch
 set hlsearch
@@ -19,8 +19,8 @@ set cursorline
 set cmdheight=2
 set switchbuf=useopen
 set numberwidth=5
-set showtabline=2
 set winwidth=79
+set background=dark
 
 " Hide tab bar
 set showtabline=0
@@ -33,8 +33,6 @@ set scrolloff=3
 " Store temporary files in a central spot
 set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
-" allow backspacing over everything in insert mode
-set backspace=indent,eol,start
 " display incomplete commands
 set showcmd
 " Enable highlighting for syntax
@@ -55,10 +53,6 @@ set modelines=0 " prevents some security exploits having to do with modelines in
 call pathogen#infect()
 call pathogen#helptags()
 call pathogen#runtime_append_all_bundles()
-
-"syntax enable
-"set background=light
-"colorscheme solarized
 
 set showmode                      " Display the mode you're in.
 set guifont=Inconsolata:h18
@@ -99,7 +93,6 @@ inoremap jj <ESC>
 set encoding=utf-8
 set fileencoding=utf-8
 set relativenumber
-set hidden
 set ruler                         " Show cursor position.
 set backspace=indent,eol,start    " Intuitive backspacing.
 set nobackup                      " Don't make a backup before overwriting a file.
@@ -109,9 +102,8 @@ set undofile " tells Vim to create <FILENAME>.un~ files whenever you edit a file
 
 nnoremap <C-j> o<Esc>k$
 set wildignore+=vendor,log,tmp,*.swp,*.o,*.obj,*.pyc,*.swc,*.DS_STORE,*.bkp
-set lines=60 columns=180
+"set lines=60 columns=180
 nnoremap <F4> :buffers<CR>:buffer<space>
-cabbr nt NERDTree
 
 "Remove MacVim's toolbar
 if has("gui_running")
@@ -129,27 +121,10 @@ iab funciton function
 
 " for mistyping :w as :W
 command! W :w
-
-"
-" Command-mode completion
-"
-
-" IMPORTANT: Uncomment one of the following lines to force
-" using 256 colors (or 88 colors) if your terminal supports it,
-" but does not automatically use 256 colors by default.
-"set t_Co=256
-"set t_Co=88
-if (&t_Co == 256 || &t_Co == 88) && !has('gui_running') &&
-  \ filereadable(expand("$HOME/.vim/bundle/guicolorscheme/plugin/guicolorscheme.vim"))
-  " Use the guicolorscheme plugin to makes 256-color or 88-color
-  " terminal use GUI colors rather than cterm colors.
-  runtime! bundle/guicolorscheme/plugin/guicolorscheme.vim
-  GuiColorScheme tomorrow-night
-else
-  " For 8-color 16-color terminals or for gvim, just use the
-  " regular :colorscheme command.
-  colorscheme tomorrow-night
-endif
+set t_Co=256
+"colorscheme tomorrow-night
+let base16colorspace=256
+colorscheme base16-default
 
 " Rainbox Parentheses {{{
 
@@ -174,7 +149,6 @@ let g:rbpt_colorpairs = [
     \ ]
 let g:rbpt_max = 16
 
-set laststatus=2 " Always show the statusline
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " OPEN FILES IN DIRECTORY OF CURRENT FILE
@@ -189,8 +163,6 @@ map <leader>v :view %%
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 command! InsertTime :normal a<c-r>=strftime('%F %H:%M:%S.0 %z')<cr>
 nnoremap ,cd :lcd %:p:h<CR>:pwd<CR>
-" <Ctrl-l> redraws the screen and removes any search highlighting.
-nnoremap <silent> <C-l> :nohl<CR><C-l>
 
 " Reselect visual block after indent/outdent
 vnoremap < <gv
@@ -208,3 +180,13 @@ nnoremap <silent> g* g*zz
 nnoremap <silent> g# g#zz
 
 let g:ctrlp_working_path_mode = 'ra'
+autocmd FileType ocaml source /Users/sergi/.opam/4.01.0dev+trunk/share/typerex/ocp-indent/ocp-indent.vim
+
+let g:syntastic_ocaml_use_ocamlc = 1
+let g:syntastic_ocaml_use_janestreet_core = 1
+let g:syntastic_ocaml_janestreet_core_dir = '/Users/sergi/.opam/4.01.0dev+trunk/lib/core/'
+
+"set rtp+=/Users/sergi/.opam/4.01.0dev+trunk/share/ocamlmerlin/vim
+"set rtp+=/Users/sergi/.opam/4.01.0dev+trunk/share/ocamlmerlin/vimbufsync
+
+"let g:syntastic_ocaml_checkers=['merlin']

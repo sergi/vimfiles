@@ -2,12 +2,9 @@ set nocompatible
 " allow unsaved background buffers and remember marks/undo for them
 set hidden
 " remember more commands and search history
-set history=10000
 set expandtab
 set tabstop=2
 set shiftwidth=2
-set softtabstop=2
-set autoindent
 set laststatus=2 " Always show the statusline
 set showmatch
 set incsearch
@@ -19,7 +16,6 @@ set cursorline
 set cmdheight=2
 set switchbuf=useopen
 set numberwidth=5
-set winwidth=79
 set background=dark
 
 " Hide tab bar
@@ -58,8 +54,9 @@ set showmode                      " Display the mode you're in.
 set guifont=Inconsolata:h18
 set number
 
+set autoindent
 set smartindent
-set gdefault
+set gdefault "global replace
 
 set wrap
 set textwidth=79
@@ -67,6 +64,7 @@ set formatoptions=qrn1
 set colorcolumn=80
 
 set list
+set listchars=tab:▸\ ,eol:¬
 
 " nnoremap <up> <nop>
 " nnoremap <down> <nop>
@@ -109,8 +107,6 @@ nnoremap <F4> :buffers<CR>:buffer<space>
 if has("gui_running")
     set guioptions=egmrt
 endif
-
-set listchars=tab:▸\ ,eol:¬
 
 " on save any: trim trailing whitespace
 autocmd! BufWrite * mark ' | silent! %s/\s\+$// | norm ''
@@ -179,7 +175,17 @@ nnoremap <silent> # #zz
 nnoremap <silent> g* g*zz
 nnoremap <silent> g# g#zz
 
+map <c-f> :call JsBeautify()<cr>
+
 let g:ctrlp_working_path_mode = 'ra'
+
+let g:syntastic_check_on_open=1
+let g:syntastic_enable_signs=1
+let g:syntastic_javascript_checkers = ['jshint', 'gjslint']
+let g:syntastic_javascript_gjslint_args="--nojsdoc"
+let g:syntastic_error_symbol = '✗'
+let g:syntastic_warning_symbol = '!'
+
 autocmd FileType ocaml source /Users/sergi/.opam/4.01.0dev+trunk/share/typerex/ocp-indent/ocp-indent.vim
 
 let g:syntastic_ocaml_use_ocamlc = 1
@@ -190,3 +196,8 @@ let g:syntastic_ocaml_janestreet_core_dir = '/Users/sergi/.opam/4.01.0dev+trunk/
 "set rtp+=/Users/sergi/.opam/4.01.0dev+trunk/share/ocamlmerlin/vimbufsync
 
 "let g:syntastic_ocaml_checkers=['merlin']
+"let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+"let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+
+"let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+"let &t_EI = "\<Esc>]50;CursorShape=0\x7"

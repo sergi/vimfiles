@@ -2,7 +2,6 @@ set nocompatible
 " allow unsaved background buffers and remember marks/undo for them
 set hidden
 " remember more commands and search history
-set expandtab
 set tabstop=2
 set shiftwidth=2
 set laststatus=2 " Always show the statusline
@@ -17,6 +16,12 @@ set cmdheight=2
 set switchbuf=useopen
 set numberwidth=5
 set background=dark
+set mouse=a
+set mousehide
+set history=1000
+set ttyfast
+set fileformats+=mac "add mac to auto-detection of file format line endings
+set nrformats-=octal                                "always assume decimal numbers
 
 " Hide tab bar
 set showtabline=0
@@ -56,7 +61,25 @@ set number
 
 set autoindent
 set smartindent
+set expandtab
+set smarttab                                        "use shiftwidth to enter tabs
+let &showbreak='↪ '
 set gdefault "global replace
+
+" folds {{{
+nnoremap zr zr:echo &foldlevel<cr>
+nnoremap zm zm:echo &foldlevel<cr>
+nnoremap zR zR:echo &foldlevel<cr>
+nnoremap zM zM:echo &foldlevel<cr>
+" }}}
+
+" sane regex {{{
+nnoremap / /\v
+vnoremap / /\v
+nnoremap ? ?\v
+vnoremap ? ?\v
+cnoremap s/ s/\v
+"}}}
 
 set wrap
 set textwidth=79
@@ -201,3 +224,23 @@ let g:syntastic_ocaml_janestreet_core_dir = '/Users/sergi/.opam/4.01.0dev+trunk/
 
 "let &t_SI = "\<Esc>]50;CursorShape=1\x7"
 "let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+
+"call unite#filters#matcher_default#use(['matcher_fuzzy'])
+"nnoremap <C-p> :<C-u>Unite -no-split -buffer-name=files   -start-insert file_rec/async:!<cr>
+"nnoremap <C-p> :Unite file_rec/async<cr>
+nnoremap <space>/ :Unite grep:.<cr>
+let g:unite_source_history_yank_enable = 1
+nnoremap <space>y :Unite history/yank<cr>
+nnoremap <space>s :Unite -quick-match buffer<cr>
+
+nnoremap <leader>ft :Unite file_rec/async -start-insert -default-action=tabopen<cr>
+nnoremap <leader>fs :Unite file_rec/async -start-insert -default-action=split<cr>
+nnoremap <leader>fv :Unite file_rec/async -start-insert -default-action=vsplit<cr>
+nnoremap <leader>fc :Unite -start-insert file_rec/async<cr>
+
+" Use ag for search
+if executable('ag')
+  let g:unite_source_grep_command = 'ag'
+  let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
+  let g:unite_source_grep_recursive_opt = ''
+endif

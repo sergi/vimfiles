@@ -12,11 +12,13 @@ set hlsearch
 set ignorecase smartcase
 " highlight current line
 set cursorline
-set cmdheight=2
+"set cmdheight=2
 set switchbuf=useopen
 set numberwidth=5
 set background=dark
 set mouse=a
+" Set xterm2 mouse mode to allow resizing of splits with mouse inside Tmux.
+set ttymouse=xterm2
 set mousehide
 set history=1000
 set ttyfast
@@ -56,7 +58,7 @@ call pathogen#helptags()
 call pathogen#runtime_append_all_bundles()
 
 set showmode                      " Display the mode you're in.
-set guifont=Inconsolata:h18
+set guifont=Inconsolata:h16
 set number
 
 set autoindent
@@ -175,12 +177,6 @@ let g:rbpt_max = 16
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
 map <leader>e :edit %%
 map <leader>v :view %%
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" InsertTime COMMAND
-" Insert the current time
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-command! InsertTime :normal a<c-r>=strftime('%F %H:%M:%S.0 %z')<cr>
 nnoremap ,cd :lcd %:p:h<CR>:pwd<CR>
 
 " Reselect visual block after indent/outdent
@@ -236,7 +232,8 @@ nnoremap <space>s :Unite -quick-match buffer<cr>
 nnoremap <leader>ft :Unite file_rec/async -start-insert -default-action=tabopen<cr>
 nnoremap <leader>fs :Unite file_rec/async -start-insert -default-action=split<cr>
 nnoremap <leader>fv :Unite file_rec/async -start-insert -default-action=vsplit<cr>
-nnoremap <leader>fc :Unite -start-insert file_rec/async<cr>
+nnoremap <leader>fx :Unite -buffer-name=files -start-insert file_rec/async<cr>
+nnoremap <leader>fc :Unite -buffer-name=files -start-insert file_rec/async:!<cr>
 
 " Use ag for search
 if executable('ag')
@@ -244,3 +241,6 @@ if executable('ag')
   let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
   let g:unite_source_grep_recursive_opt = ''
 endif
+
+" Automatically leave insert mode after 'updatetime' (4s by default).
+au CursorHoldI * stopinsert

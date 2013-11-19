@@ -197,6 +197,7 @@ nnoremap <silent> g# g#zz
 map <c-f> :call JsBeautify()<cr>
 
 let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_cmd = 'CtrlPMixed'
 
 let g:syntastic_check_on_open=1
 let g:syntastic_enable_signs=1
@@ -205,7 +206,7 @@ let g:syntastic_javascript_gjslint_args="--nojsdoc"
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '!'
 
-autocmd FileType ocaml source /Users/sergi/.opam/4.01.0dev+trunk/share/typerex/ocp-indent/ocp-indent.vim
+autocmd FileType ocaml source /Users/sergi/.opam/system/share/typerex/ocp-indent/ocp-indent.vim
 
 let g:syntastic_ocaml_use_ocamlc = 1
 let g:syntastic_ocaml_use_janestreet_core = 1
@@ -242,5 +243,11 @@ if executable('ag')
   let g:unite_source_grep_recursive_opt = ''
 endif
 
+" set 'updatetime' to 15 seconds when in insert mode
+ au InsertEnter * let updaterestore=&updatetime | set updatetime=15000
+ au InsertLeave * let &updatetime=updaterestore
 " Automatically leave insert mode after 'updatetime' (4s by default).
 au CursorHoldI * stopinsert
+
+"Go Language Stuff
+au FileType go au BufWritePre <buffer> Fmt "Format on save

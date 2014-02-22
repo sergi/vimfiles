@@ -252,3 +252,12 @@ au CursorHoldI * stopinsert
 
 "Go Language Stuff
 au FileType go au BufWritePre <buffer> Fmt "Format on save
+
+set omnifunc=syntaxcomplete#Complete
+let g:tern_map_keys=1
+let g:tern_show_argument_hints='on_hold'
+
+let s:ocamlmerlin=substitute(system('opam config var share'),'\n$','','''') .  "/ocamlmerlin"
+execute "set rtp+=".s:ocamlmerlin."/vim"
+execute "set rtp+=".s:ocamlmerlin."/vimbufsync"
+autocmd FileType ocaml source /Users/sergi/.opam/4.01.0dev+trunk/share/vim/syntax/ocp-indent.vim

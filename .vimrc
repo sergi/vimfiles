@@ -207,42 +207,15 @@ let g:syntastic_javascript_gjslint_args="--nojsdoc"
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '!'
 
-autocmd FileType ocaml source /Users/sergi/.opam/system/share/typerex/ocp-indent/ocp-indent.vim
-
 let g:syntastic_ocaml_use_ocamlc = 1
 let g:syntastic_ocaml_use_janestreet_core = 1
 let g:syntastic_ocaml_janestreet_core_dir = '/Users/sergi/.opam/4.01.0dev+trunk/lib/core/'
 
-"set rtp+=/Users/sergi/.opam/4.01.0dev+trunk/share/ocamlmerlin/vim
-"set rtp+=/Users/sergi/.opam/4.01.0dev+trunk/share/ocamlmerlin/vimbufsync
-
-"let g:syntastic_ocaml_checkers=['merlin']
 "let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
 "let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
 
 "let &t_SI = "\<Esc>]50;CursorShape=1\x7"
 "let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-
-"call unite#filters#matcher_default#use(['matcher_fuzzy'])
-"nnoremap <C-p> :<C-u>Unite -no-split -buffer-name=files   -start-insert file_rec/async:!<cr>
-"nnoremap <C-p> :Unite file_rec/async<cr>
-nnoremap <space>/ :Unite grep:.<cr>
-let g:unite_source_history_yank_enable = 1
-nnoremap <space>y :Unite history/yank<cr>
-nnoremap <space>s :Unite -quick-match buffer<cr>
-
-nnoremap <leader>ft :Unite file_rec/async -start-insert -default-action=tabopen<cr>
-nnoremap <leader>fs :Unite file_rec/async -start-insert -default-action=split<cr>
-nnoremap <leader>fv :Unite file_rec/async -start-insert -default-action=vsplit<cr>
-nnoremap <leader>fx :Unite -buffer-name=files -start-insert file_rec/async<cr>
-nnoremap <leader>fc :Unite -buffer-name=files -start-insert file_rec/async:!<cr>
-
-" Use ag for search
-if executable('ag')
-  let g:unite_source_grep_command = 'ag'
-  let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
-  let g:unite_source_grep_recursive_opt = ''
-endif
 
 " set 'updatetime' to 15 seconds when in insert mode
  au InsertEnter * let updaterestore=&updatetime | set updatetime=15000

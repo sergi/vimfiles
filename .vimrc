@@ -243,3 +243,6 @@ execute "set rtp+=".s:ocamlmerlin."/vim"
 execute "set rtp+=".s:ocamlmerlin."/vimbufsync"
 
 autocmd FileType ocaml source /Users/sergi/.opam/4.01.0dev+trunk/share/vim/syntax/ocp-indent.vim
+
+map <silent> <F8>   :Explore<CR>
+map <silent> <S-F8> :sp +Explore<CR>

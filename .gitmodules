@@ -37,9 +37,6 @@
 [submodule "bundle/fsharp"]
 	path = bundle/fsharp
 	url = git://github.com/kongo2002/fsharp-vim.git
-[submodule "bundle/ag"]
-	path = bundle/ag
-	url = https://github.com/epmatsw/ag.vim
 [submodule "bundle/typescript-vim"]
 	path = bundle/typescript-vim
 	url = https://github.com/leafgarland/typescript-vim.git
@@ -54,9 +51,6 @@
 	url = https://github.com/chriskempson/base16-vim.git
 [submodule "vim-jsbeautify"]
 	path = vim-jsbeautify
-	url = https://github.com/maksimr/vim-jsbeautify.git
-[submodule "bundle/vim-jsbeautify"]
-	path = bundle/vim-jsbeautify
 	url = https://github.com/maksimr/vim-jsbeautify.git
 [submodule "bundle/unite"]
 	path = bundle/unite

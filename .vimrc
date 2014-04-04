@@ -246,3 +246,4 @@ autocmd FileType ocaml source /Users/sergi/.opam/4.01.0dev+trunk/share/vim/synta
 
 map <silent> <F8>   :Explore<CR>
 map <silent> <S-F8> :sp +Explore<CR>
+map <silent><buffer><C-F> :%! js-beautify -s 2 -file -<CR>

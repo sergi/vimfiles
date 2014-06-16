@@ -91,3 +91,18 @@
 [submodule "bundle/vim-snipmate"]
 	path = bundle/vim-snipmate
 	url = https://github.com/garbas/vim-snipmate.git
+[submodule "bundle/vim-pml"]
+	path = bundle/vim-pml
+	url = https://github.com/nelstrom/vim-pml.git
+[submodule "bundle/vim-ragtag"]
+	path = bundle/vim-ragtag
+	url = https://github.com/tpope/vim-ragtag.git
+[submodule "bundle/nerdtree"]
+	path = bundle/nerdtree
+	url = https://github.com/scrooloose/nerdtree.git
+[submodule "bundle/ocp-indent-vim"]
+	path = bundle/ocp-indent-vim
+	url = https://github.com/def-lkb/ocp-indent-vim.git
+[submodule "bundle/mayansmoke"]
+	path = bundle/mayansmoke
+	url = https://github.com/vim-scripts/mayansmoke.git

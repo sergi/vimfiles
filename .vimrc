@@ -15,7 +15,7 @@ set cursorline
 "set cmdheight=2
 set switchbuf=useopen
 set numberwidth=5
-set background=dark
+set background=light
 set mouse=a
 " Set xterm2 mouse mode to allow resizing of splits with mouse inside Tmux.
 set ttymouse=xterm2
@@ -34,8 +34,10 @@ set t_ti= t_te=
 " keep more context when scrolling off the end of a buffer
 set scrolloff=3
 " Store temporary files in a central spot
-set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
-set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+set backupdir=~/.vim-tmp//,~/.tmp//,~/tmp//,/var/tmp//,/tmp//,.
+set directory=~/.vim-tmp//,~/.tmp//,~/tmp//,/var/tmp//,/tmp//,.
+set undodir=~/.vim/undodir
+"
 " display incomplete commands
 set showcmd
 " Enable highlighting for syntax
@@ -75,14 +77,6 @@ nnoremap zR zR:echo &foldlevel<cr>
 nnoremap zM zM:echo &foldlevel<cr>
 " }}}
 
-" sane regex {{{
-nnoremap / /\v
-vnoremap / /\v
-nnoremap ? ?\v
-vnoremap ? ?\v
-cnoremap s/ s/\v
-"}}}
-
 set wrap
 set textwidth=79
 set formatoptions=qrn1
@@ -120,7 +114,6 @@ set ruler                         " Show cursor position.
 set backspace=indent,eol,start    " Intuitive backspacing.
 set nobackup                      " Don't make a backup before overwriting a file.
 set nowritebackup                 " And again.
-set undodir=/Volumes/Macintosh\ HD/.vimundo,.
 set undofile " tells Vim to create <FILENAME>.un~ files whenever you edit a file. "
 
 nnoremap <C-j> o<Esc>k$
@@ -144,8 +137,9 @@ iab funciton function
 command! W :w
 set t_Co=256
 "colorscheme tomorrow-night
-let base16colorspace=256
-colorscheme base16-default
+"let base16colorspace=256
+"colorscheme base16-default
+colorscheme mayansmoke
 
 " Rainbox Parentheses {{{
 
@@ -242,8 +236,207 @@ let s:ocamlmerlin=substitute(system('opam config var share'),'\n$','','''') .  "
 execute "set rtp+=".s:ocamlmerlin."/vim"
 execute "set rtp+=".s:ocamlmerlin."/vimbufsync"
 
-autocmd FileType ocaml source /Users/sergi/.opam/4.01.0dev+trunk/share/vim/syntax/ocp-indent.vim
+let g:ocp_indent_vimfile = system("opam config var share")
+let g:ocp_indent_vimfile = substitute(g:ocp_indent_vimfile, '[\r\n]*$', '', '')
+let g:ocp_indent_vimfile = g:ocp_indent_vimfile . "/vim/syntax/ocp-indent.vim"
+
+autocmd FileType ocaml exec ":source " . g:ocp_indent_vimfile
 
 map <silent> <F8>   :Explore<CR>
 map <silent> <S-F8> :sp +Explore<CR>
 map <silent><buffer><C-F> :%! js-beautify -s 2 -file -<CR>
+
+function! CurDir()
+  return substitute(getcwd(), '/Users/sergi/', "~/", "g")
+endfunction
+
+" Format the statusline
+"set statusline=\ %F%m%r%h\ %w\ \ CWD:\ %r%{CurDir()}%h\ \ \ %l/%L\ %{fugitive#statusline()}
+
+"statusline setup
+set statusline =%#identifier#
+set statusline+=[%t] "tail of the filename
+set statusline+=%*
+
+"display a warning if fileformat isnt unix
+set statusline+=%#warningmsg#
+set statusline+=%{&ff!='unix'?'['.&ff.']':''}
+set statusline+=%*
+
+"display a warning if file encoding isnt utf-8
+set statusline+=%#warningmsg#
+set statusline+=%{(&fenc!='utf-8'&&&fenc!='')?'['.&fenc.']':''}
+set statusline+=%*
+
+set statusline+=%h "help file flag
+set statusline+=%y "filetype
+
+"read only flag
+set statusline+=%#identifier#
+set statusline+=%r
+set statusline+=%*
+
+"modified flag
+set statusline+=%#identifier#
+set statusline+=%m
+set statusline+=%*
+
+set statusline+=%{fugitive#statusline()}
+
+"display a warning if &et is wrong, or we have mixed-indenting
+set statusline+=%#error#
+set statusline+=%{StatuslineTabWarning()}
+set statusline+=%*
+
+set statusline+=%{StatuslineTrailingSpaceWarning()}
+
+set statusline+=%{StatuslineLongLineWarning()}
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+"display a warning if &paste is set
+set statusline+=%#error#
+set statusline+=%{&paste?'[paste]':''}
+set statusline+=%*
+
+set statusline+=%= "left/right separator
+set statusline+=%{StatuslineCurrentHighlight()}\ \ "current highlight
+set statusline+=%c, "cursor column
+set statusline+=%l/%L "cursor line/total lines
+set statusline+=\ %P "percent through file
+set laststatus=2
+
+"recalculate the trailing whitespace warning when idle, and after saving
+autocmd cursorhold,bufwritepost * unlet! b:statusline_trailing_space_warning
+
+"return '[\s]' if trailing white space is detected
+"return '' otherwise
+function! StatuslineTrailingSpaceWarning()
+    if !exists("b:statusline_trailing_space_warning")
+
+        if !&modifiable
+            let b:statusline_trailing_space_warning = ''
+            return b:statusline_trailing_space_warning
+        endif
+
+        if search('\s\+$', 'nw') != 0
+            let b:statusline_trailing_space_warning = '[\s]'
+        else
+            let b:statusline_trailing_space_warning = ''
+        endif
+    endif
+    return b:statusline_trailing_space_warning
+endfunction
+
+
+"return the syntax highlight group under the cursor ''
+function! StatuslineCurrentHighlight()
+    let name = synIDattr(synID(line('.'),col('.'),1),'name')
+    if name == ''
+        return ''
+    else
+        return '[' . name . ']'
+    endif
+endfunction
+
+"recalculate the tab warning flag when idle and after writing
+autocmd cursorhold,bufwritepost * unlet! b:statusline_tab_warning
+
+"return '[&et]' if &et is set wrong
+"return '[mixed-indenting]' if spaces and tabs are used to indent
+"return an empty string if everything is fine
+function! StatuslineTabWarning()
+    if !exists("b:statusline_tab_warning")
+        let b:statusline_tab_warning = ''
+
+        if !&modifiable
+            return b:statusline_tab_warning
+        endif
+
+        let tabs = search('^\t', 'nw') != 0
+
+"find spaces that arent used as alignment in the first indent column
+        let spaces = search('^ \{' . &ts . ',}[^\t]', 'nw') != 0
+
+        if tabs && spaces
+            let b:statusline_tab_warning = '[mixed-indenting]'
+        elseif (spaces && !&et) || (tabs && &et)
+            let b:statusline_tab_warning = '[&et]'
+        endif
+    endif
+    return b:statusline_tab_warning
+endfunction
+
+"recalculate the long line warning when idle and after saving
+autocmd cursorhold,bufwritepost * unlet! b:statusline_long_line_warning
+
+"return a warning for "long lines" where "long" is either &textwidth or 80 (if
+"no &textwidth is set)
+"
+"return '' if no long lines
+"return '[#x,my,$z] if long lines are found, were x is the number of long
+"lines, y is the median length of the long lines and z is the length of the
+"longest line
+function! StatuslineLongLineWarning()
+    if !exists("b:statusline_long_line_warning")
+
+        if !&modifiable
+            let b:statusline_long_line_warning = ''
+            return b:statusline_long_line_warning
+        endif
+
+        let long_line_lens = s:LongLines()
+
+        if len(long_line_lens) > 0
+            let b:statusline_long_line_warning = "[" .
+                        \ '#' . len(long_line_lens) . "," .
+                        \ 'm' . s:Median(long_line_lens) . "," .
+                        \ '$' . max(long_line_lens) . "]"
+        else
+            let b:statusline_long_line_warning = ""
+        endif
+    endif
+    return b:statusline_long_line_warning
+endfunction
+
+"return a list containing the lengths of the long lines in this buffer
+function! s:LongLines()
+    let threshold = (&tw ? &tw : 80)
+    let spaces = repeat(" ", &ts)
+    let line_lens = map(getline(1,'$'), 'len(substitute(v:val, "\\t", spaces, "g"))')
+    return filter(line_lens, 'v:val > threshold')
+endfunction
+
+"find the median of the given array of numbers
+function! s:Median(nums)
+    let nums = sort(a:nums)
+    let l = len(nums)
+
+    if l % 2 == 1
+        let i = (l-1) / 2
+        return nums[i]
+    else
+        return (nums[l/2] + nums[(l/2)-1]) / 2
+    endif
+endfunction
+
+au BufEnter *.ml setf ocaml
+au BufEnter *.mli setf ocaml
+au FileType ocaml call FT_ocaml()
+function FT_ocaml()
+    set textwidth=80
+    set colorcolumn=80
+    set shiftwidth=2
+    set tabstop=2
+    " ocp-indent with ocp-indent-vim
+    let opamshare=system("opam config var share | tr -d '\n'")
+    execute "autocmd FileType ocaml source".opamshare."/vim/syntax/ocp-indent.vim"
+    filetype indent on
+    filetype plugin indent on
+endfunction
+
+"let g:ctrlp_user_command = "find %s -type f | egrep -v '/\.(git|hg|svn)|solr|tmp/' | egrep -v '\.(png|exe|jpg|gif|jar|class|swp|swo|log|gitkep|keepme|so|o)$'"
+let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+let g:ctrlp_max_files=0

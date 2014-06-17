@@ -139,7 +139,8 @@ set t_Co=256
 "colorscheme tomorrow-night
 "let base16colorspace=256
 "colorscheme base16-default
-colorscheme mayansmoke
+colorscheme solarized
+"colorscheme mayansmoke
 
 " Rainbox Parentheses {{{
 
@@ -436,6 +437,10 @@ function FT_ocaml()
     filetype indent on
     filetype plugin indent on
 endfunction
+
+" Use ag over grep
+set grepprg=ag\ --nogroup\ --nocolor
+nnoremap F :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
 "let g:ctrlp_user_command = "find %s -type f | egrep -v '/\.(git|hg|svn)|solr|tmp/' | egrep -v '\.(png|exe|jpg|gif|jar|class|swp|swo|log|gitkep|keepme|so|o)$'"
 let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'

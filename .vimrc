@@ -15,7 +15,7 @@ set cursorline
 "set cmdheight=2
 set switchbuf=useopen
 set numberwidth=5
-set background=light
+set background=dark
 set mouse=a
 " Set xterm2 mouse mode to allow resizing of splits with mouse inside Tmux.
 set ttymouse=xterm2
@@ -137,10 +137,8 @@ iab funciton function
 command! W :w
 set t_Co=256
 "colorscheme tomorrow-night
-"let base16colorspace=256
-"colorscheme base16-default
-colorscheme solarized
-"colorscheme mayansmoke
+let base16colorspace=256
+colorscheme base16-default
 
 " Rainbox Parentheses {{{
 

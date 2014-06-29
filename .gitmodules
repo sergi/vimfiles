@@ -88,9 +88,6 @@
 [submodule "bundle/vim-snipmate"]
 	path = bundle/vim-snipmate
 	url = https://github.com/garbas/vim-snipmate.git
-[submodule "bundle/vim-pml"]
-	path = bundle/vim-pml
-	url = https://github.com/nelstrom/vim-pml.git
 [submodule "bundle/vim-ragtag"]
 	path = bundle/vim-ragtag
 	url = https://github.com/tpope/vim-ragtag.git
@@ -103,3 +100,9 @@
 [submodule "bundle/pyte"]
 	path = bundle/pyte
 	url = https://github.com/therubymug/vim-pyte.git
+[submodule "bundle/tagbar"]
+	path = bundle/tagbar
+	url = https://github.com/majutsushi/tagbar.git
+[submodule "bundle/vim-pml"]
+	path = bundle/vim-pml
+	url = https://github.com/sergi/vim-pml.git

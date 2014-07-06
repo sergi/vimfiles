@@ -241,7 +241,7 @@ autocmd FileType ocaml exec ":source " . g:ocp_indent_vimfile
 
 map <silent> <F8>   :Explore<CR>
 map <silent> <S-F8> :sp +Explore<CR>
-map <silent><buffer><C-j> :%! js-beautify -s 2 -file -<CR>
+map <silent><buffer><C-S-j> :%! js-beautify -s 2 -file -<CR>
 " Format the whole document and go back to the postiion we were
 nmap <C-f> mtgg=G't
 imap <C-f> <ESC><C-f>

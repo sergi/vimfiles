@@ -308,6 +308,8 @@ set statusline+=%l/%L "cursor line/total lines
 set statusline+=\ %P "percent through file
 set laststatus=2
 
+let maplocalleader = "\\"
+
 "recalculate the trailing whitespace warning when idle, and after saving
 autocmd cursorhold,bufwritepost * unlet! b:statusline_trailing_space_warning
 
@@ -444,3 +446,17 @@ nnoremap F :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 "let g:ctrlp_user_command = "find %s -type f | egrep -v '/\.(git|hg|svn)|solr|tmp/' | egrep -v '\.(png|exe|jpg|gif|jar|class|swp|swo|log|gitkep|keepme|so|o)$'"
 let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 let g:ctrlp_max_files=0
+
+autocmd filetype pml call AutoCorrect()
+iab JAvaScript JavaScript
+
+" Omni Completion settings
+set completeopt=longest,menuone
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
+  \ '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
+
+inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
+  \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
+
+let g:SuperTabDefaultCompletionType = "<C-X><C-O>"

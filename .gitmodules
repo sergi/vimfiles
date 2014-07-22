@@ -106,3 +106,18 @@
 [submodule "bundle/vim-pml"]
 	path = bundle/vim-pml
 	url = https://github.com/sergi/vim-pml.git
+[submodule "bundle/vim-orgmode"]
+	path = bundle/vim-orgmode
+	url = https://github.com/jceb/vim-orgmode.git
+[submodule "bundle/vim-speeddating"]
+	path = bundle/vim-speeddating
+	url = https://github.com/tpope/vim-speeddating.git
+[submodule "bundle/vim-autocorrect"]
+	path = bundle/vim-autocorrect
+	url = https://github.com/panozzaj/vim-autocorrect.git
+[submodule "bundle/supertab"]
+	path = bundle/supertab
+	url = https://github.com/ervandew/supertab.git
+[submodule "bundle/YouCompleteMe"]
+	path = bundle/YouCompleteMe
+	url = https://github.com/Valloric/YouCompleteMe.git

@@ -242,8 +242,8 @@ autocmd FileType ocaml exec ":source " . g:ocp_indent_vimfile
 map <silent> <F8>   :Explore<CR>
 map <silent> <S-F8> :sp +Explore<CR>
 map <silent><buffer><C-S-j> :%! js-beautify -s 2 -file -<CR>
-" Format the whole document and go back to the postiion we were
-nmap <C-f> mtgg=G't
+" Format the whole document and go back to the position we were
+nmap <C-f> mtgg=G'tzz
 imap <C-f> <ESC><C-f>
 
 function! CurDir()
@@ -460,3 +460,17 @@ inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
   \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
 
 let g:SuperTabDefaultCompletionType = "<C-X><C-O>"
+
+
+" Blacklist pml files for YCM
+let g:ycm_filetype_blacklist = { 'pml': 1 }
+
+let Tlist_Ctags_Cmd = "/usr/local/bin/ctags"
+nmap <Leader>\ :TlistToggle<CR>
+
+" Custom mappings for the unite buffer
+autocmd FileType pml call s:pml_settings()
+function! s:pml_settings()
+  " Play nice with supertab
+  let b:SuperTabDisabled=1
+endfunction

@@ -1,11 +1,7 @@
 set nocompatible
-" allow unsaved background buffers and remember marks/undo for them
-set hidden
-" remember more commands and search history
 set tabstop=2
 set shiftwidth=2
 set laststatus=2 " Always show the statusline
-set showmatch
 set incsearch
 set hlsearch
 " make searches case-sensitive only if they contain upper-case characters
@@ -20,7 +16,6 @@ set mouse=a
 " Set xterm2 mouse mode to allow resizing of splits with mouse inside Tmux.
 set ttymouse=xterm2
 set mousehide
-set history=1000
 set ttyfast
 set fileformats+=mac "add mac to auto-detection of file format line endings
 set nrformats-=octal                                "always assume decimal numbers
@@ -31,33 +26,136 @@ set showtabline=0
 " Prevent Vim from clobbering the scrollback buffer. See
 " http://www.shallowsky.com/linux/noaltscreen.html
 set t_ti= t_te=
-" keep more context when scrolling off the end of a buffer
-set scrolloff=3
-" Store temporary files in a central spot
-set backupdir=~/.vim-tmp//,~/.tmp//,~/tmp//,/var/tmp//,/tmp//,.
-set directory=~/.vim-tmp//,~/.tmp//,~/tmp//,/var/tmp//,/tmp//,.
-set undodir=~/.vim/undodir
-"
+
+" -----------------------------
+" File Locations
+" -----------------------------
+set backupdir=~/.vim/.backup
+set directory=~/.vim/.tmp
+
+" Persistent Undo
+if has('persistent_undo')
+  set undofile
+  set undodir=~/.vim/.undo
+endif
+
+" ---------------
+" Behaviors
+" ---------------
+syntax enable
+set backup " Turn on backups
+"set autoread " Automatically reload changes if detected
+set wildmenu " Turn on WiLd menu
+set hidden " Change buffer - without saving
+set history=768 " Number of things to remember in history.
+set cf " Enable error files & error jumping.
+set clipboard+=unnamed " Yanks go on clipboard instead.
+set autowrite " Writes on make/shell commands
+" set timeoutlen=450 " Time to wait for a command (after leader for example).
+set ttimeout
+set ttimeoutlen=100 " Time to wait for a command (after leader for example).
+set nofoldenable " Disable folding entirely.
+set foldlevelstart=99 " I really don't like folds.
+set formatoptions=crql
+set iskeyword+=\$,- " Add extra characters that are valid parts of variables
+set nostartofline " Don't go to the start of the line after some commands
+set scrolloff=3 " Keep three lines below the last line when scrolling
+set gdefault " this makes search/replace global by default
+set switchbuf=useopen " Switch to an existing buffer if one exists
+
+" ---------------
+" Visual
+" ---------------
+set showmatch " Show matching brackets.
+set matchtime=2 " How many tenths of a second to blink
+" Show invisible characters
+set list
+" Show trailing spaces as dots and carrots for extended lines.
+" From Janus, http://git.io/PLbAlw
+" Reset the listchars
+set listchars=""
+" make tabs visible
+set listchars=tab:▸▸
+" show trailing spaces as dots
+set listchars+=trail:•
+" The character to show in the last column when wrap is off and the line
+" continues beyond the right of the screen
+set listchars+=extends:>
+" The character to show in the last column when wrap is off and the line
+" continues beyond the right of the screen
+set listchars+=precedes:<
+
+" ----------------------------------------
+" Commands
+" ----------------------------------------
+" Silently execute an external command
+" No 'Press Any Key to Contiue BS'
+" from: http://vim.wikia.com/wiki/Avoiding_the_%22Hit_ENTER_to_continue%22_prompts
+command! -nargs=1 SilentCmd
+\ | execute ':silent !'.<q-args>
+\ | execute ':redraw!'
+" Fixes common typos
+command! W w
+command! Q q
+
 " display incomplete commands
 set showcmd
-" Enable highlighting for syntax
-syntax on
-" Enable file type detection.
-" Use the default filetype settings, so that mail gets 'tw' set to 72,
-" 'cindent' is on in C files, etc.
-" Also load indent files, to automatically do language-dependent indenting.
-filetype plugin indent on
 " use emacs-style tab completion when selecting files, etc
 set wildmode=longest,list
 " make tab completion for files/buffers act like bash
-set wildmenu
 let mapleader=","
 
 set modelines=0 " prevents some security exploits having to do with modelines in files.
 
-call pathogen#infect()
-call pathogen#helptags()
-call pathogen#runtime_append_all_bundles()
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
+
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-sensible'
+Plugin 'tpope/vim-markdown'
+Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-repeat'
+Plugin 'pangloss/vim-javascript'
+Plugin 'sjl/gundo.vim'
+Plugin 'vim-scripts/pep8'
+Plugin 'fs111/pydoc.vim'
+Plugin 'terryma/vim-multiple-cursors'
+Plugin 'jnwhiteh/vim-golang'
+Plugin 'chriskempson/base16-vim'
+Plugin 'kien/ctrlp.vim'
+Plugin 'jelera/vim-javascript-syntax'
+Plugin 'nathanaelkane/vim-indent-guides'
+Plugin 'scrooloose/syntastic'
+Plugin 'marijnh/tern_for_vim'
+Plugin 'Lokaltog/vim-easymotion'
+Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'ap/vim-css-color'
+Plugin 'tpope/vim-ragtag'
+Plugin 'scrooloose/nerdtree'
+Plugin 'def-lkb/ocp-indent-vim'
+Plugin 'sergi/vim-pml'
+Plugin 'panozzaj/vim-autocorrect'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'tomtom/tlib_vim'
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
+
+call vundle#end()            " required
+filetype plugin indent on    " required
+
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<C-Space>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 set showmode                      " Display the mode you're in.
 set guifont=Inconsolata:h16
@@ -79,10 +177,9 @@ nnoremap zM zM:echo &foldlevel<cr>
 
 set wrap
 set textwidth=79
-set formatoptions=qrn1
+"set formatoptions=qrn1
 set colorcolumn=80
 
-set list
 set listchars=tab:▸\ ,eol:¬
 
 " nnoremap <up> <nop>
@@ -112,12 +209,12 @@ set fileencoding=utf-8
 set relativenumber
 set ruler                         " Show cursor position.
 set backspace=indent,eol,start    " Intuitive backspacing.
-set nobackup                      " Don't make a backup before overwriting a file.
-set nowritebackup                 " And again.
 set undofile " tells Vim to create <FILENAME>.un~ files whenever you edit a file. "
 
 nnoremap <C-j> o<Esc>k$
-set wildignore+=vendor,log,tmp,*.swp,*.o,*.obj,*.pyc,*.swc,*.DS_STORE,*.bkp
+set wildignore+=vendor,log,tmp,*.swp,*.o,*.obj,*.pyc,*.swc,*.DS_STORE,*.bkp,*.o,*.obj,*.exe,*.so,*.dll,*.pyc,.svn,.hg,.bzr,.git,
+\.sass-cache,*.class,*.scssc,*.cssc,sprockets%*,*.lessc,*/node_modules/*,
+\rake-pipeline-*
 "set lines=60 columns=180
 nnoremap <F4> :buffers<CR>:buffer<space>
 
@@ -459,8 +556,6 @@ inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
 inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
   \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
 
-let g:SuperTabDefaultCompletionType = "<C-X><C-O>"
-
 
 " Blacklist pml files for YCM
 let g:ycm_filetype_blacklist = { 'pml': 1 }
@@ -468,9 +563,20 @@ let g:ycm_filetype_blacklist = { 'pml': 1 }
 let Tlist_Ctags_Cmd = "/usr/local/bin/ctags"
 nmap <Leader>\ :TlistToggle<CR>
 
-" Custom mappings for the unite buffer
-autocmd FileType pml call s:pml_settings()
-function! s:pml_settings()
-  " Play nice with supertab
-  let b:SuperTabDisabled=1
+" ---------------
+" Paste using Paste Mode
+"
+" Keeps indentation in source.
+" ---------------
+function! PasteWithPasteMode()
+  if &paste
+    normal p
+  else
+    " Enable paste mode and paste the text, then disable paste mode.
+    set paste
+    normal p
+    set nopaste
+  endif
 endfunction
+command! PasteWithPasteMode call PasteWithPasteMode()
+nnoremap <silent> <leader>p :PasteWithPasteMode<CR>

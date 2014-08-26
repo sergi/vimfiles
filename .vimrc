@@ -118,7 +118,6 @@ Plugin 'gmarik/Vundle.vim'
 
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-sensible'
 Plugin 'tpope/vim-markdown'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-repeat'
@@ -143,7 +142,6 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'def-lkb/ocp-indent-vim'
 Plugin 'sergi/vim-pml'
 Plugin 'panozzaj/vim-autocorrect'
-Plugin 'Valloric/YouCompleteMe'
 Plugin 'tomtom/tlib_vim'
 Plugin 'MarcWeber/vim-addon-mw-utils'
 Plugin 'SirVer/ultisnips'
@@ -153,9 +151,9 @@ call vundle#end()            " required
 filetype plugin indent on    " required
 
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-let g:UltiSnipsExpandTrigger="<C-Space>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+"let g:UltiSnipsExpandTrigger="<C-j>"
+"let g:UltiSnipsJumpForwardTrigger="<c-b>"
+"let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 set showmode                      " Display the mode you're in.
 set guifont=Inconsolata:h16
@@ -165,7 +163,7 @@ set autoindent
 set smartindent
 set expandtab
 set smarttab                                        "use shiftwidth to enter tabs
-let &showbreak='↪ '
+"let &showbreak='~'
 set gdefault "global replace
 
 " folds {{{
@@ -211,7 +209,7 @@ set ruler                         " Show cursor position.
 set backspace=indent,eol,start    " Intuitive backspacing.
 set undofile " tells Vim to create <FILENAME>.un~ files whenever you edit a file. "
 
-nnoremap <C-j> o<Esc>k$
+"nnoremap <C-j> o<Esc>k$
 set wildignore+=vendor,log,tmp,*.swp,*.o,*.obj,*.pyc,*.swc,*.DS_STORE,*.bkp,*.o,*.obj,*.exe,*.so,*.dll,*.pyc,.svn,.hg,.bzr,.git,
 \.sass-cache,*.class,*.scssc,*.cssc,sprockets%*,*.lessc,*/node_modules/*,
 \rake-pipeline-*
@@ -225,8 +223,6 @@ endif
 
 " on save any: trim trailing whitespace
 autocmd! BufWrite * mark ' | silent! %s/\s\+$// | norm ''
-
-au BufNewFile,BufRead *.sjs set filetype=javascript
 
 iab funciton function
 
@@ -284,9 +280,9 @@ nnoremap <silent> # #zz
 nnoremap <silent> g* g*zz
 nnoremap <silent> g# g#zz
 
-" let g:ctrlp_working_path_mode = 'ra'
-let g:ctrlp_working_path_mode = 0
-let g:ctrlp_cmd = 'CtrlP .'
+let g:ctrlp_working_path_mode = 'ra'
+"let g:ctrlp_working_path_mode = 0
+let g:ctrlp_cmd = 'CtrlPMRU .'
 
 let g:syntastic_check_on_open=1
 let g:syntastic_enable_signs=1
@@ -544,6 +540,8 @@ nnoremap F :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 let g:ctrlp_max_files=0
 
+au BufNewFile,BufRead *.pml set filetype=xml
+au BufRead,BufNewFile *.pml setlocal spell
 autocmd filetype pml call AutoCorrect()
 iab JAvaScript JavaScript
 
@@ -580,3 +578,10 @@ function! PasteWithPasteMode()
 endfunction
 command! PasteWithPasteMode call PasteWithPasteMode()
 nnoremap <silent> <leader>p :PasteWithPasteMode<CR>
+
+"Append this to your .vimrc to add merlin to vim's runtime-path:
+let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
+execute "set rtp+=" . g:opamshare . "/merlin/vim"
+
+"Also run the following line in vim to index the documentation:
+:execute "helptags " . g:opamshare . "/merlin/vim/doc"

@@ -49,7 +49,7 @@ set wildmenu " Turn on WiLd menu
 set hidden " Change buffer - without saving
 set history=768 " Number of things to remember in history.
 set cf " Enable error files & error jumping.
-set clipboard+=unnamed " Yanks go on clipboard instead.
+"set clipboard+=unnamed " Yanks go on clipboard instead.
 set autowrite " Writes on make/shell commands
 " set timeoutlen=450 " Time to wait for a command (after leader for example).
 set ttimeout
@@ -146,6 +146,7 @@ Plugin 'tomtom/tlib_vim'
 Plugin 'MarcWeber/vim-addon-mw-utils'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
+Plugin 'regedarek/ZoomWin'
 
 call vundle#end()
 filetype off
@@ -281,7 +282,7 @@ nnoremap <silent> # #zz
 nnoremap <silent> g* g*zz
 nnoremap <silent> g# g#zz
 
-let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_working_path_mode = 'r'
 "let g:ctrlp_working_path_mode = 0
 let g:ctrlp_cmd = 'CtrlPMRU .'
 
@@ -586,3 +587,6 @@ execute "set rtp+=" . g:opamshare . "/merlin/vim"
 
 "Also run the following line in vim to index the documentation:
 :execute "helptags " . g:opamshare . "/merlin/vim/doc"
+if $TMUX == ''
+  set clipboard+=unnamed
+endif

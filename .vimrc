@@ -122,14 +122,14 @@ Plugin 'tpope/vim-markdown'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-repeat'
 Plugin 'pangloss/vim-javascript'
-Plugin 'sjl/gundo.vim'
-Plugin 'vim-scripts/pep8'
-Plugin 'fs111/pydoc.vim'
+"Plugin 'sjl/gundo.vim'
+"Plugin 'vim-scripts/pep8'
+"Plugin 'fs111/pydoc.vim'
 Plugin 'terryma/vim-multiple-cursors'
-Plugin 'jnwhiteh/vim-golang'
+Plugin 'fatih/vim-go.git'
 Plugin 'chriskempson/base16-vim'
 Plugin 'kien/ctrlp.vim'
-Plugin 'jelera/vim-javascript-syntax'
+"Plugin 'jelera/vim-javascript-syntax'
 Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'scrooloose/syntastic'
 Plugin 'marijnh/tern_for_vim'
@@ -140,13 +140,15 @@ Plugin 'ap/vim-css-color'
 Plugin 'tpope/vim-ragtag'
 Plugin 'scrooloose/nerdtree'
 Plugin 'def-lkb/ocp-indent-vim'
-Plugin 'sergi/vim-pml'
+"Plugin 'sergi/vim-pml'
 Plugin 'panozzaj/vim-autocorrect'
 Plugin 'tomtom/tlib_vim'
 Plugin 'MarcWeber/vim-addon-mw-utils'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'regedarek/ZoomWin'
+Plugin 'amdt/vim-niji'
+Plugin 'mephux/vim-jsfmt'
 
 call vundle#end()
 filetype off
@@ -294,8 +296,8 @@ let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '!'
 
 let g:syntastic_ocaml_use_ocamlc = 1
-let g:syntastic_ocaml_use_janestreet_core = 1
-let g:syntastic_ocaml_janestreet_core_dir = '/Users/sergi/.opam/4.01.0dev+trunk/lib/core/'
+"let g:syntastic_ocaml_use_janestreet_core = 1
+"let g:syntastic_ocaml_janestreet_core_dir = '/Users/sergi/.opam/4.01.0dev+trunk/lib/core/'
 
 "let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
 "let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
@@ -324,22 +326,17 @@ let g:miniBufExplMapWindowNavArrows = 1
 let g:miniBufExplMapCTabSwitchBufs = 1
 let g:miniBufExplModSelTarget = 1
 
-let s:ocamlmerlin=substitute(system('opam config var share'),'\n$','','''') .  "/ocamlmerlin"
-execute "set rtp+=".s:ocamlmerlin."/vim"
-execute "set rtp+=".s:ocamlmerlin."/vimbufsync"
-
-let g:ocp_indent_vimfile = system("opam config var share")
-let g:ocp_indent_vimfile = substitute(g:ocp_indent_vimfile, '[\r\n]*$', '', '')
-let g:ocp_indent_vimfile = g:ocp_indent_vimfile . "/vim/syntax/ocp-indent.vim"
-
-autocmd FileType ocaml exec ":source " . g:ocp_indent_vimfile
-
 map <silent> <F8>   :Explore<CR>
 map <silent> <S-F8> :sp +Explore<CR>
 map <silent><buffer><C-S-j> :%! js-beautify -s 2 -file -<CR>
 " Format the whole document and go back to the position we were
 nmap <C-f> mtgg=G'tzz
 imap <C-f> <ESC><C-f>
+
+" Ctrl-s saves file
+nmap <c-s> :w<CR>
+imap <c-s> <Esc>:w<CR>a
+imap <c-s> <Esc><c-s>
 
 function! CurDir()
   return substitute(getcwd(), '/Users/sergi/', "~/", "g")
@@ -587,6 +584,16 @@ execute "set rtp+=" . g:opamshare . "/merlin/vim"
 
 "Also run the following line in vim to index the documentation:
 :execute "helptags " . g:opamshare . "/merlin/vim/doc"
+let g:syntastic_ocaml_checkers = ['merlin']
+
 if $TMUX == ''
   set clipboard+=unnamed
 endif
+" Toggle Paste mode
+noremap <silent> <leader>o :set paste!<CR>
+
+au BufNewFile,BufRead *.pml set filetype=json
+let g:syntastic_racket_code_ayatollah_script = '/Users/sergi/.vim/code-ayatollah.rkt'
+
+" More granular undo (undo step after each space)
+imap <Space> <Space><C-G>u

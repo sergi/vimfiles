@@ -92,8 +92,8 @@ set listchars+=precedes:<
 " No 'Press Any Key to Contiue BS'
 " from: http://vim.wikia.com/wiki/Avoiding_the_%22Hit_ENTER_to_continue%22_prompts
 command! -nargs=1 SilentCmd
-\ | execute ':silent !'.<q-args>
-\ | execute ':redraw!'
+      \ | execute ':silent !'.<q-args>
+      \ | execute ':redraw!'
 " Fixes common typos
 command! W w
 command! Q q
@@ -116,12 +116,13 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
 
-Plugin 'scrooloose/nerdcommenter'
+"Plugin 'scrooloose/nerdcommenter'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-markdown'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-repeat'
-Plugin 'pangloss/vim-javascript'
+Plugin 'tpope/vim-commentary'
+Plugin 'tpope/vim-ragtag'
 "Plugin 'sjl/gundo.vim'
 "Plugin 'vim-scripts/pep8'
 "Plugin 'fs111/pydoc.vim'
@@ -129,7 +130,9 @@ Plugin 'terryma/vim-multiple-cursors'
 Plugin 'fatih/vim-go.git'
 Plugin 'chriskempson/base16-vim'
 Plugin 'kien/ctrlp.vim'
-"Plugin 'jelera/vim-javascript-syntax'
+Plugin 'pangloss/vim-javascript'
+Plugin 'jelera/vim-javascript-syntax'
+Plugin 'Raimondi/delimitMate'
 Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'scrooloose/syntastic'
 Plugin 'marijnh/tern_for_vim'
@@ -137,8 +140,7 @@ Plugin 'Lokaltog/vim-easymotion'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'ap/vim-css-color'
-Plugin 'tpope/vim-ragtag'
-Plugin 'scrooloose/nerdtree'
+"Plugin 'scrooloose/nerdtree'
 Plugin 'def-lkb/ocp-indent-vim'
 "Plugin 'sergi/vim-pml'
 Plugin 'panozzaj/vim-autocorrect'
@@ -149,6 +151,28 @@ Plugin 'honza/vim-snippets'
 Plugin 'regedarek/ZoomWin'
 Plugin 'amdt/vim-niji'
 Plugin 'mephux/vim-jsfmt'
+Plugin 'mxw/vim-jsx'
+"Plugin 'tpope/vim-fireplace'
+"Plugin 'tpope/vim-leiningen'
+Plugin 'rking/ag.vim'
+Plugin 'cespare/vim-sbd'
+Plugin 'jpalardy/vim-slime'
+Plugin 'xolox/vim-misc.git'
+Plugin 'xolox/vim-session'
+"Plugin 'altercation/vim-colors-solarized'
+
+let g:netrw_liststyle=3
+
+let g:slime_target = "tmux"
+
+nnoremap <silent> <leader>bd    :Sbd<CR>
+nnoremap <silent> <leader>bdm   :Sbdm<CR>
+
+" --- type _ to search the word in all files in the current dir
+nmap _ :Ag <c-r>=expand("<cword>")<cr><cr>
+nnoremap <space>/ :Ag"
+
+imap <C-c> <CR><Esc>O
 
 call vundle#end()
 filetype off
@@ -215,14 +239,14 @@ set undofile " tells Vim to create <FILENAME>.un~ files whenever you edit a file
 
 "nnoremap <C-j> o<Esc>k$
 set wildignore+=vendor,log,tmp,*.swp,*.o,*.obj,*.pyc,*.swc,*.DS_STORE,*.bkp,*.o,*.obj,*.exe,*.so,*.dll,*.pyc,.svn,.hg,.bzr,.git,
-\.sass-cache,*.class,*.scssc,*.cssc,sprockets%*,*.lessc,*/node_modules/*,
-\rake-pipeline-*
+      \.sass-cache,*.class,*.scssc,*.cssc,sprockets%*,*.lessc,*/node_modules/*,
+      \rake-pipeline-*
 "set lines=60 columns=180
 nnoremap <F4> :buffers<CR>:buffer<space>
 
 "Remove MacVim's toolbar
 if has("gui_running")
-    set guioptions=egmrt
+  set guioptions=egmrt
 endif
 
 " on save any: trim trailing whitespace
@@ -235,29 +259,29 @@ command! W :w
 set t_Co=256
 "colorscheme tomorrow-night
 let base16colorspace=256
-colorscheme base16-default
+colorscheme base16-tomorrow
 
 " Rainbox Parentheses {{{
 
 nnoremap <leader>R :RainbowParenthesesToggle<cr>
 let g:rbpt_colorpairs = [
-    \ ['brown',       'RoyalBlue3'],
-    \ ['Darkblue',    'SeaGreen3'],
-    \ ['darkgray',    'DarkOrchid3'],
-    \ ['darkgreen',   'firebrick3'],
-    \ ['darkcyan',    'RoyalBlue3'],
-    \ ['darkred',     'SeaGreen3'],
-    \ ['darkmagenta', 'DarkOrchid3'],
-    \ ['brown',       'firebrick3'],
-    \ ['gray',        'RoyalBlue3'],
-    \ ['black',       'SeaGreen3'],
-    \ ['darkmagenta', 'DarkOrchid3'],
-    \ ['Darkblue',    'firebrick3'],
-    \ ['darkgreen',   'RoyalBlue3'],
-    \ ['darkcyan',    'SeaGreen3'],
-    \ ['darkred',     'DarkOrchid3'],
-    \ ['red',         'firebrick3'],
-    \ ]
+      \ ['brown',       'RoyalBlue3'],
+      \ ['Darkblue',    'SeaGreen3'],
+      \ ['darkgray',    'DarkOrchid3'],
+      \ ['darkgreen',   'firebrick3'],
+      \ ['darkcyan',    'RoyalBlue3'],
+      \ ['darkred',     'SeaGreen3'],
+      \ ['darkmagenta', 'DarkOrchid3'],
+      \ ['brown',       'firebrick3'],
+      \ ['gray',        'RoyalBlue3'],
+      \ ['black',       'SeaGreen3'],
+      \ ['darkmagenta', 'DarkOrchid3'],
+      \ ['Darkblue',    'firebrick3'],
+      \ ['darkgreen',   'RoyalBlue3'],
+      \ ['darkcyan',    'SeaGreen3'],
+      \ ['darkred',     'DarkOrchid3'],
+      \ ['red',         'firebrick3'],
+      \ ]
 let g:rbpt_max = 16
 
 
@@ -285,8 +309,8 @@ nnoremap <silent> g* g*zz
 nnoremap <silent> g# g#zz
 
 let g:ctrlp_working_path_mode = 'r'
-"let g:ctrlp_working_path_mode = 0
-let g:ctrlp_cmd = 'CtrlPMRU .'
+" let g:ctrlp_working_path_mode = 0
+" let g:ctrlp_cmd = 'CtrlPMRU .'
 
 let g:syntastic_check_on_open=1
 let g:syntastic_enable_signs=1
@@ -296,8 +320,6 @@ let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '!'
 
 let g:syntastic_ocaml_use_ocamlc = 1
-"let g:syntastic_ocaml_use_janestreet_core = 1
-"let g:syntastic_ocaml_janestreet_core_dir = '/Users/sergi/.opam/4.01.0dev+trunk/lib/core/'
 
 "let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
 "let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
@@ -306,8 +328,8 @@ let g:syntastic_ocaml_use_ocamlc = 1
 "let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 
 " set 'updatetime' to 15 seconds when in insert mode
- au InsertEnter * let updaterestore=&updatetime | set updatetime=15000
- au InsertLeave * let &updatetime=updaterestore
+au InsertEnter * let updaterestore=&updatetime | set updatetime=15000
+au InsertLeave * let &updatetime=updaterestore
 " Automatically leave insert mode after 'updatetime' (4s by default).
 au CursorHoldI * stopinsert
 
@@ -321,14 +343,8 @@ map <Leader> <Plug>(easymotion-prefix)
 
 set term=screen-256color
 
-let g:miniBufExplMapWindowNavVim = 1
-let g:miniBufExplMapWindowNavArrows = 1
-let g:miniBufExplMapCTabSwitchBufs = 1
-let g:miniBufExplModSelTarget = 1
-
 map <silent> <F8>   :Explore<CR>
 map <silent> <S-F8> :sp +Explore<CR>
-map <silent><buffer><C-S-j> :%! js-beautify -s 2 -file -<CR>
 " Format the whole document and go back to the position we were
 nmap <C-f> mtgg=G'tzz
 imap <C-f> <ESC><C-f>
@@ -408,31 +424,31 @@ autocmd cursorhold,bufwritepost * unlet! b:statusline_trailing_space_warning
 "return '[\s]' if trailing white space is detected
 "return '' otherwise
 function! StatuslineTrailingSpaceWarning()
-    if !exists("b:statusline_trailing_space_warning")
+  if !exists("b:statusline_trailing_space_warning")
 
-        if !&modifiable
-            let b:statusline_trailing_space_warning = ''
-            return b:statusline_trailing_space_warning
-        endif
-
-        if search('\s\+$', 'nw') != 0
-            let b:statusline_trailing_space_warning = '[\s]'
-        else
-            let b:statusline_trailing_space_warning = ''
-        endif
+    if !&modifiable
+      let b:statusline_trailing_space_warning = ''
+      return b:statusline_trailing_space_warning
     endif
-    return b:statusline_trailing_space_warning
+
+    if search('\s\+$', 'nw') != 0
+      let b:statusline_trailing_space_warning = '[\s]'
+    else
+      let b:statusline_trailing_space_warning = ''
+    endif
+  endif
+  return b:statusline_trailing_space_warning
 endfunction
 
 
 "return the syntax highlight group under the cursor ''
 function! StatuslineCurrentHighlight()
-    let name = synIDattr(synID(line('.'),col('.'),1),'name')
-    if name == ''
-        return ''
-    else
-        return '[' . name . ']'
-    endif
+  let name = synIDattr(synID(line('.'),col('.'),1),'name')
+  if name == ''
+    return ''
+  else
+    return '[' . name . ']'
+  endif
 endfunction
 
 "recalculate the tab warning flag when idle and after writing
@@ -442,25 +458,25 @@ autocmd cursorhold,bufwritepost * unlet! b:statusline_tab_warning
 "return '[mixed-indenting]' if spaces and tabs are used to indent
 "return an empty string if everything is fine
 function! StatuslineTabWarning()
-    if !exists("b:statusline_tab_warning")
-        let b:statusline_tab_warning = ''
+  if !exists("b:statusline_tab_warning")
+    let b:statusline_tab_warning = ''
 
-        if !&modifiable
-            return b:statusline_tab_warning
-        endif
-
-        let tabs = search('^\t', 'nw') != 0
-
-"find spaces that arent used as alignment in the first indent column
-        let spaces = search('^ \{' . &ts . ',}[^\t]', 'nw') != 0
-
-        if tabs && spaces
-            let b:statusline_tab_warning = '[mixed-indenting]'
-        elseif (spaces && !&et) || (tabs && &et)
-            let b:statusline_tab_warning = '[&et]'
-        endif
+    if !&modifiable
+      return b:statusline_tab_warning
     endif
-    return b:statusline_tab_warning
+
+    let tabs = search('^\t', 'nw') != 0
+
+    "find spaces that arent used as alignment in the first indent column
+    let spaces = search('^ \{' . &ts . ',}[^\t]', 'nw') != 0
+
+    if tabs && spaces
+      let b:statusline_tab_warning = '[mixed-indenting]'
+    elseif (spaces && !&et) || (tabs && &et)
+      let b:statusline_tab_warning = '[&et]'
+    endif
+  endif
+  return b:statusline_tab_warning
 endfunction
 
 "recalculate the long line warning when idle and after saving
@@ -474,62 +490,50 @@ autocmd cursorhold,bufwritepost * unlet! b:statusline_long_line_warning
 "lines, y is the median length of the long lines and z is the length of the
 "longest line
 function! StatuslineLongLineWarning()
-    if !exists("b:statusline_long_line_warning")
+  if !exists("b:statusline_long_line_warning")
 
-        if !&modifiable
-            let b:statusline_long_line_warning = ''
-            return b:statusline_long_line_warning
-        endif
-
-        let long_line_lens = s:LongLines()
-
-        if len(long_line_lens) > 0
-            let b:statusline_long_line_warning = "[" .
-                        \ '#' . len(long_line_lens) . "," .
-                        \ 'm' . s:Median(long_line_lens) . "," .
-                        \ '$' . max(long_line_lens) . "]"
-        else
-            let b:statusline_long_line_warning = ""
-        endif
+    if !&modifiable
+      let b:statusline_long_line_warning = ''
+      return b:statusline_long_line_warning
     endif
-    return b:statusline_long_line_warning
+
+    let long_line_lens = s:LongLines()
+
+    if len(long_line_lens) > 0
+      let b:statusline_long_line_warning = "[" .
+            \ '#' . len(long_line_lens) . "," .
+            \ 'm' . s:Median(long_line_lens) . "," .
+            \ '$' . max(long_line_lens) . "]"
+    else
+      let b:statusline_long_line_warning = ""
+    endif
+  endif
+  return b:statusline_long_line_warning
 endfunction
 
 "return a list containing the lengths of the long lines in this buffer
 function! s:LongLines()
-    let threshold = (&tw ? &tw : 80)
-    let spaces = repeat(" ", &ts)
-    let line_lens = map(getline(1,'$'), 'len(substitute(v:val, "\\t", spaces, "g"))')
-    return filter(line_lens, 'v:val > threshold')
+  let threshold = (&tw ? &tw : 80)
+  let spaces = repeat(" ", &ts)
+  let line_lens = map(getline(1,'$'), 'len(substitute(v:val, "\\t", spaces, "g"))')
+  return filter(line_lens, 'v:val > threshold')
 endfunction
 
 "find the median of the given array of numbers
 function! s:Median(nums)
-    let nums = sort(a:nums)
-    let l = len(nums)
+  let nums = sort(a:nums)
+  let l = len(nums)
 
-    if l % 2 == 1
-        let i = (l-1) / 2
-        return nums[i]
-    else
-        return (nums[l/2] + nums[(l/2)-1]) / 2
-    endif
+  if l % 2 == 1
+    let i = (l-1) / 2
+    return nums[i]
+  else
+    return (nums[l/2] + nums[(l/2)-1]) / 2
+  endif
 endfunction
 
 au BufEnter *.ml setf ocaml
 au BufEnter *.mli setf ocaml
-au FileType ocaml call FT_ocaml()
-function FT_ocaml()
-    set textwidth=80
-    set colorcolumn=80
-    set shiftwidth=2
-    set tabstop=2
-    " ocp-indent with ocp-indent-vim
-    let opamshare=system("opam config var share | tr -d '\n'")
-    execute "autocmd FileType ocaml source".opamshare."/vim/syntax/ocp-indent.vim"
-    filetype indent on
-    filetype plugin indent on
-endfunction
 
 " Use ag over grep
 set grepprg=ag\ --nogroup\ --nocolor
@@ -539,6 +543,7 @@ nnoremap F :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 let g:ctrlp_max_files=0
 
+" PML file settings
 au BufNewFile,BufRead *.pml set filetype=xml
 au BufRead,BufNewFile *.pml setlocal spell
 autocmd filetype pml call AutoCorrect()
@@ -548,17 +553,11 @@ iab JAvaScript JavaScript
 set completeopt=longest,menuone
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
-  \ '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
+      \ '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
 
 inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
-  \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
+      \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
 
-
-" Blacklist pml files for YCM
-let g:ycm_filetype_blacklist = { 'pml': 1 }
-
-let Tlist_Ctags_Cmd = "/usr/local/bin/ctags"
-nmap <Leader>\ :TlistToggle<CR>
 
 " ---------------
 " Paste using Paste Mode
@@ -592,7 +591,6 @@ endif
 " Toggle Paste mode
 noremap <silent> <leader>o :set paste!<CR>
 
-au BufNewFile,BufRead *.pml set filetype=json
 let g:syntastic_racket_code_ayatollah_script = '/Users/sergi/.vim/code-ayatollah.rkt'
 
 " More granular undo (undo step after each space)

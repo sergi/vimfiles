@@ -1,6 +1,157 @@
 set nocompatible
+" }}}
+" Basic options ----------------------------------------------------------- {{{
+
+set visualbell
+set history=1000
+set undoreload=10000
+set list
+set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
+set lazyredraw
+set showbreak=↪
+set splitbelow
+set splitright
+set autowrite
+set autoread
+set shiftround
+set title
+set linebreak
+set colorcolumn=+1
+
+" Spelling
+"
+" There are three dictionaries I use for spellchecking:
+"
+"   /usr/share/dict/words
+"   Basic stuff.
+"
+"   ~/.vim/custom-dictionary.utf-8.add
+"   Custom words (like my name).  This is in my (version-controlled) dotfiles.
+"
+"   ~/.vim-local-dictionary.utf-8.add
+"   More custom words.  This is *not* version controlled, so I can stick
+"   work stuff in here without leaking internal names and shit.
+"
+" I also remap zG to add to the local dict (vanilla zG is useless anyway).
+set dictionary=/usr/share/dict/words
+set spellfile=~/.vim/custom-dictionary.utf-8.add,~/.vim-local-dictionary.utf-8.add
+nnoremap zG 2zg
+
+" iTerm2 is currently slow as balls at rendering the nice unicode lines, so for
+" now I'll just use ASCII pipes.  They're ugly but at least I won't want to kill
+" myself when trying to move around a file.
+set fillchars=diff:⣿,vert:│
+set fillchars=diff:⣿,vert:\|
+
+" Don't try to highlight lines longer than 800 characters.
+set synmaxcol=800
+
+" Time out on key codes but not mappings.
+" Basically this makes terminal Vim work sanely.
+set notimeout
+set ttimeout
+set ttimeoutlen=10
+
+" Make Vim able to edit crontab files again.
+set backupskip=/tmp/*,/private/tmp/*"
+
+" Resize splits when the window is resized
+au VimResized * :wincmd =
+
+" Cursorline {{{
+" Only show cursorline in the current window and in normal mode.
+
+augroup cline
+    au!
+    au WinLeave,InsertEnter * set nocursorline
+    au WinEnter,InsertLeave * set cursorline
+augroup END
+
+" }}}
+
+" Backups {{{
+
+set backup                        " enable backups
+set noswapfile                    " it's 2013, Vim.
+
+set undodir=~/.vim/tmp/undo//     " undo files
+set backupdir=~/.vim/tmp/backup// " backups
+set directory=~/.vim/tmp/swap//   " swap files
+
+" Make those folders automatically if they don't already exist.
+if !isdirectory(expand(&undodir))
+  call mkdir(expand(&undodir), "p")
+endif
+if !isdirectory(expand(&backupdir))
+  call mkdir(expand(&backupdir), "p")
+endif
+if !isdirectory(expand(&directory))
+  call mkdir(expand(&directory), "p")
+endif
+
+" }}}
+
+" Copying text to the system clipboard.
+"
+" For some reason Vim no longer wants to talk to the OS X pasteboard through "*.
+" Computers are bullshit.
+function! g:FuckingCopyTheTextPlease()
+  let old_z = @z
+  normal! gv"zy
+  call system('pbcopy', @z)
+  let @z = old_z
+endfunction
+noremap <leader>p :silent! set paste<CR>"*p:set nopaste<CR>
+" noremap <leader>p mz:r!pbpaste<cr>`z
+vnoremap <leader>y :<c-u>call g:FuckingCopyTheTextPlease()<cr>
+nnoremap <leader>y VV:<c-u>call g:FuckingCopyTheTextPlease()<cr>
+
+" "Uppercase word" mapping.
+"
+" This mapping allows you to press <c-u> in insert mode to convert the current
+" word to uppercase.  It's handy when you're writing names of constants and
+" don't want to use Capslock.
+"
+" To use it you type the name of the constant in lowercase.  While your
+" cursor is at the end of the word, press <c-u> to uppercase it, and then
+" continue happily on your way:
+"
+"                            cursor
+"                            v
+"     max_connections_allowed|
+"     <c-u>
+"     MAX_CONNECTIONS_ALLOWED|
+"                            ^
+"                            cursor
+"
+" It works by exiting out of insert mode, recording the current cursor location
+" in the z mark, using gUiw to uppercase inside the current word, moving back to
+" the z mark, and entering insert mode again.
+"
+" Note that this will overwrite the contents of the z mark.  I never use it, but
+" if you do you'll probably want to use another mark.
+inoremap <C-u> <esc>mzgUiw`za
+
+" Keep the cursor in place while joining lines
+nnoremap J mzJ`z
+
+" Toggle paste
+" For some reason pastetoggle doesn't redraw the screen (thus the status bar
+" doesn't change) while :set paste! does, so I use that instead.
+" set pastetoggle=<F6>
+nnoremap <F6> :set paste!<cr>
+
+
 set tabstop=2
 set shiftwidth=2
+set autoindent
+set smartindent
+set expandtab
+set smarttab                                        "use shiftwidth to enter tabs
+
+" Toggle line numbers
+nnoremap <leader>l :setlocal number!<cr>
+
 set laststatus=2 " Always show the statusline
 set incsearch
 set hlsearch
@@ -27,27 +178,13 @@ set showtabline=0
 " http://www.shallowsky.com/linux/noaltscreen.html
 set t_ti= t_te=
 
-" -----------------------------
-" File Locations
-" -----------------------------
-set backupdir=~/.vim/.backup
-set directory=~/.vim/.tmp
-
-" Persistent Undo
-if has('persistent_undo')
-  set undofile
-  set undodir=~/.vim/.undo
-endif
-
 " ---------------
 " Behaviors
 " ---------------
 syntax enable
-set backup " Turn on backups
 "set autoread " Automatically reload changes if detected
 set wildmenu " Turn on WiLd menu
 set hidden " Change buffer - without saving
-set history=768 " Number of things to remember in history.
 set cf " Enable error files & error jumping.
 "set clipboard+=unnamed " Yanks go on clipboard instead.
 set autowrite " Writes on make/shell commands
@@ -116,33 +253,33 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
 
-"Plugin 'scrooloose/nerdcommenter'
+Plugin 'scrooloose/nerdcommenter'
 Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-markdown'
+" Plugin 'tpope/vim-markdown'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-repeat'
-Plugin 'tpope/vim-commentary'
+" Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-ragtag'
 "Plugin 'sjl/gundo.vim'
 "Plugin 'vim-scripts/pep8'
 "Plugin 'fs111/pydoc.vim'
 Plugin 'terryma/vim-multiple-cursors'
-Plugin 'fatih/vim-go.git'
+" Plugin 'fatih/vim-go.git'
 Plugin 'chriskempson/base16-vim'
 Plugin 'kien/ctrlp.vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'jelera/vim-javascript-syntax'
+Plugin 'marijnh/tern_for_vim'
 Plugin 'Raimondi/delimitMate'
 Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'scrooloose/syntastic'
-Plugin 'marijnh/tern_for_vim'
-Plugin 'Lokaltog/vim-easymotion'
+" Plugin 'Lokaltog/vim-easymotion'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'ap/vim-css-color'
 "Plugin 'scrooloose/nerdtree'
 Plugin 'def-lkb/ocp-indent-vim'
-"Plugin 'sergi/vim-pml'
+" Plugin 'sergi/vim-pml'
 Plugin 'panozzaj/vim-autocorrect'
 Plugin 'tomtom/tlib_vim'
 Plugin 'MarcWeber/vim-addon-mw-utils'
@@ -157,22 +294,34 @@ Plugin 'mxw/vim-jsx'
 Plugin 'rking/ag.vim'
 Plugin 'cespare/vim-sbd'
 Plugin 'jpalardy/vim-slime'
+Plugin 'vim-scripts/paredit.vim'
 Plugin 'xolox/vim-misc.git'
 Plugin 'xolox/vim-session'
-"Plugin 'altercation/vim-colors-solarized'
+Plugin 'sergi/vim-chicken-doc'
+Plugin 'ervandew/supertab'
+Plugin 'editorconfig/editorconfig-vim'
+Plugin 'bling/vim-airline'
+Plugin 'wlangstroth/vim-racket'
+Plugin 'kien/rainbow_parentheses.vim'
 
+" Markdown
+Plugin 'godlygeek/tabular'
+Plugin 'plasticboy/vim-markdown'
+
+let g:vim_markdown_frontmatter=1
 let g:netrw_liststyle=3
 
 let g:slime_target = "tmux"
+let g:slime_default_config = {"socket_name": "default", "target_pane": "2"}
 
 nnoremap <silent> <leader>bd    :Sbd<CR>
 nnoremap <silent> <leader>bdm   :Sbdm<CR>
 
 " --- type _ to search the word in all files in the current dir
-nmap _ :Ag <c-r>=expand("<cword>")<cr><cr>
+" nmap _ :Ag <c-r>=expand("<cword>")<cr><cr>
 nnoremap <space>/ :Ag"
 
-imap <C-c> <CR><Esc>O
+inoremap <C-c> <CR><Esc>O
 
 call vundle#end()
 filetype off
@@ -184,13 +333,9 @@ let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 set showmode                      " Display the mode you're in.
-set guifont=Inconsolata:h16
+set guifont=Consolas\ for\ Powerline:h16
 set number
 
-set autoindent
-set smartindent
-set expandtab
-set smarttab                                        "use shiftwidth to enter tabs
 "let &showbreak='~'
 set gdefault "global replace
 
@@ -227,8 +372,6 @@ nnoremap k gk
 "nnoremap <C-l> <C-w>l
 
 " au FocusLost * :wa " Save on lost focus
-
-inoremap jj <ESC>
 
 set encoding=utf-8
 set fileencoding=utf-8
@@ -314,10 +457,12 @@ let g:ctrlp_working_path_mode = 'r'
 
 let g:syntastic_check_on_open=1
 let g:syntastic_enable_signs=1
-let g:syntastic_javascript_checkers = ['jshint', 'gjslint']
+let g:syntastic_javascript_checkers = ['gjslint', 'eslint']
 let g:syntastic_javascript_gjslint_args="--nojsdoc"
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '!'
+" highlight SyntasticErrorSign guifg=red guibg=red
+" highlight SyntasticError guibg=#2f0000
 
 let g:syntastic_ocaml_use_ocamlc = 1
 
@@ -346,191 +491,16 @@ set term=screen-256color
 map <silent> <F8>   :Explore<CR>
 map <silent> <S-F8> :sp +Explore<CR>
 " Format the whole document and go back to the position we were
-nmap <C-f> mtgg=G'tzz
-imap <C-f> <ESC><C-f>
+nnoremap <C-f> mtgg=G'tzz
+inoremap <C-f> <ESC><C-f>
 
 " Ctrl-s saves file
-nmap <c-s> :w<CR>
-imap <c-s> <Esc>:w<CR>a
-imap <c-s> <Esc><c-s>
-
-function! CurDir()
-  return substitute(getcwd(), '/Users/sergi/', "~/", "g")
-endfunction
-
-" Format the statusline
-"set statusline=\ %F%m%r%h\ %w\ \ CWD:\ %r%{CurDir()}%h\ \ \ %l/%L\ %{fugitive#statusline()}
-
-"statusline setup
-set statusline =%#identifier#
-set statusline+=[%t] "tail of the filename
-set statusline+=%*
-
-"display a warning if fileformat isnt unix
-set statusline+=%#warningmsg#
-set statusline+=%{&ff!='unix'?'['.&ff.']':''}
-set statusline+=%*
-
-"display a warning if file encoding isnt utf-8
-set statusline+=%#warningmsg#
-set statusline+=%{(&fenc!='utf-8'&&&fenc!='')?'['.&fenc.']':''}
-set statusline+=%*
-
-set statusline+=%h "help file flag
-set statusline+=%y "filetype
-
-"read only flag
-set statusline+=%#identifier#
-set statusline+=%r
-set statusline+=%*
-
-"modified flag
-set statusline+=%#identifier#
-set statusline+=%m
-set statusline+=%*
-
-set statusline+=%{fugitive#statusline()}
-
-"display a warning if &et is wrong, or we have mixed-indenting
-set statusline+=%#error#
-set statusline+=%{StatuslineTabWarning()}
-set statusline+=%*
-
-set statusline+=%{StatuslineTrailingSpaceWarning()}
-
-set statusline+=%{StatuslineLongLineWarning()}
-
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-"display a warning if &paste is set
-set statusline+=%#error#
-set statusline+=%{&paste?'[paste]':''}
-set statusline+=%*
-
-set statusline+=%= "left/right separator
-set statusline+=%{StatuslineCurrentHighlight()}\ \ "current highlight
-set statusline+=%c, "cursor column
-set statusline+=%l/%L "cursor line/total lines
-set statusline+=\ %P "percent through file
-set laststatus=2
+nnoremap <c-s> :w<CR>
+inoremap <c-s> <Esc>:w<CR>a
 
 let maplocalleader = "\\"
 
-"recalculate the trailing whitespace warning when idle, and after saving
-autocmd cursorhold,bufwritepost * unlet! b:statusline_trailing_space_warning
-
-"return '[\s]' if trailing white space is detected
-"return '' otherwise
-function! StatuslineTrailingSpaceWarning()
-  if !exists("b:statusline_trailing_space_warning")
-
-    if !&modifiable
-      let b:statusline_trailing_space_warning = ''
-      return b:statusline_trailing_space_warning
-    endif
-
-    if search('\s\+$', 'nw') != 0
-      let b:statusline_trailing_space_warning = '[\s]'
-    else
-      let b:statusline_trailing_space_warning = ''
-    endif
-  endif
-  return b:statusline_trailing_space_warning
-endfunction
-
-
-"return the syntax highlight group under the cursor ''
-function! StatuslineCurrentHighlight()
-  let name = synIDattr(synID(line('.'),col('.'),1),'name')
-  if name == ''
-    return ''
-  else
-    return '[' . name . ']'
-  endif
-endfunction
-
-"recalculate the tab warning flag when idle and after writing
-autocmd cursorhold,bufwritepost * unlet! b:statusline_tab_warning
-
-"return '[&et]' if &et is set wrong
-"return '[mixed-indenting]' if spaces and tabs are used to indent
-"return an empty string if everything is fine
-function! StatuslineTabWarning()
-  if !exists("b:statusline_tab_warning")
-    let b:statusline_tab_warning = ''
-
-    if !&modifiable
-      return b:statusline_tab_warning
-    endif
-
-    let tabs = search('^\t', 'nw') != 0
-
-    "find spaces that arent used as alignment in the first indent column
-    let spaces = search('^ \{' . &ts . ',}[^\t]', 'nw') != 0
-
-    if tabs && spaces
-      let b:statusline_tab_warning = '[mixed-indenting]'
-    elseif (spaces && !&et) || (tabs && &et)
-      let b:statusline_tab_warning = '[&et]'
-    endif
-  endif
-  return b:statusline_tab_warning
-endfunction
-
-"recalculate the long line warning when idle and after saving
-autocmd cursorhold,bufwritepost * unlet! b:statusline_long_line_warning
-
-"return a warning for "long lines" where "long" is either &textwidth or 80 (if
-"no &textwidth is set)
-"
-"return '' if no long lines
-"return '[#x,my,$z] if long lines are found, were x is the number of long
-"lines, y is the median length of the long lines and z is the length of the
-"longest line
-function! StatuslineLongLineWarning()
-  if !exists("b:statusline_long_line_warning")
-
-    if !&modifiable
-      let b:statusline_long_line_warning = ''
-      return b:statusline_long_line_warning
-    endif
-
-    let long_line_lens = s:LongLines()
-
-    if len(long_line_lens) > 0
-      let b:statusline_long_line_warning = "[" .
-            \ '#' . len(long_line_lens) . "," .
-            \ 'm' . s:Median(long_line_lens) . "," .
-            \ '$' . max(long_line_lens) . "]"
-    else
-      let b:statusline_long_line_warning = ""
-    endif
-  endif
-  return b:statusline_long_line_warning
-endfunction
-
-"return a list containing the lengths of the long lines in this buffer
-function! s:LongLines()
-  let threshold = (&tw ? &tw : 80)
-  let spaces = repeat(" ", &ts)
-  let line_lens = map(getline(1,'$'), 'len(substitute(v:val, "\\t", spaces, "g"))')
-  return filter(line_lens, 'v:val > threshold')
-endfunction
-
-"find the median of the given array of numbers
-function! s:Median(nums)
-  let nums = sort(a:nums)
-  let l = len(nums)
-
-  if l % 2 == 1
-    let i = (l-1) / 2
-    return nums[i]
-  else
-    return (nums[l/2] + nums[(l/2)-1]) / 2
-  endif
-endfunction
+" source ~/.vim/.vim_statusbar
 
 au BufEnter *.ml setf ocaml
 au BufEnter *.mli setf ocaml
@@ -543,10 +513,17 @@ nnoremap F :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 let g:ctrlp_max_files=0
 
+let g:gitgutter_max_signs=5000
+
 " PML file settings
-au BufNewFile,BufRead *.pml set filetype=xml
-au BufRead,BufNewFile *.pml setlocal spell
-autocmd filetype pml call AutoCorrect()
+augroup filetype_pml
+    autocmd!
+    au BufNewFile,BufRead *.pml set ft=xml
+    autocmd FileType pml  set ft=xml
+    autocmd FileType pml call AutoCorrect()
+    au BufRead,BufNewFile *.pml setlocal spell
+augroup END
+
 iab JAvaScript JavaScript
 
 " Omni Completion settings
@@ -594,4 +571,32 @@ noremap <silent> <leader>o :set paste!<CR>
 let g:syntastic_racket_code_ayatollah_script = '/Users/sergi/.vim/code-ayatollah.rkt'
 
 " More granular undo (undo step after each space)
-imap <Space> <Space><C-G>u
+inoremap <Space> <Space><C-G>u
+
+let g:session_autoload = 'no'
+
+" Sergi's mappings
+nnoremap <leader>- ddp
+nnoremap <leader>_ kddpk
+
+inoremap <c-u> <esc>viw~i
+
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+nnoremap <leader>sv :source $MYVIMRC<cr>
+inoremap kj <esc>
+
+let g:airline_powerline_fonts = 1
+
+func! WordProcessorMode()
+  setlocal formatoptions=1
+  " setlocal noexpandtab
+  map j gj
+  map k gk
+  setlocal spell spelllang=en_us
+  set thesaurus+=/Users/sbrown/.vim/thesaurus/mthesaur.txt
+  set complete+=s
+  set formatprg=par
+  setlocal wrap
+  setlocal linebreak
+endfu
+com! WP call WordProcessorMode()

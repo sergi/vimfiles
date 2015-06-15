@@ -17,6 +17,8 @@ set shiftround
 set title
 set linebreak
 set colorcolumn=+1
+" Remove message from when you start vim
+set shortmess+=I
 
 " Spelling
 "
@@ -44,7 +46,7 @@ set fillchars=diff:⣿,vert:│
 set fillchars=diff:⣿,vert:\|
 
 " Don't try to highlight lines longer than 800 characters.
-set synmaxcol=800
+set synmaxcol=500
 
 " Time out on key codes but not mappings.
 " Basically this makes terminal Vim work sanely.
@@ -188,9 +190,6 @@ set hidden " Change buffer - without saving
 set cf " Enable error files & error jumping.
 "set clipboard+=unnamed " Yanks go on clipboard instead.
 set autowrite " Writes on make/shell commands
-" set timeoutlen=450 " Time to wait for a command (after leader for example).
-set ttimeout
-set ttimeoutlen=100 " Time to wait for a command (after leader for example).
 set nofoldenable " Disable folding entirely.
 set foldlevelstart=99 " I really don't like folds.
 set formatoptions=crql
@@ -205,8 +204,6 @@ set switchbuf=useopen " Switch to an existing buffer if one exists
 " ---------------
 set showmatch " Show matching brackets.
 set matchtime=2 " How many tenths of a second to blink
-" Show invisible characters
-set list
 " Show trailing spaces as dots and carrots for extended lines.
 " From Janus, http://git.io/PLbAlw
 " Reset the listchars
@@ -240,7 +237,7 @@ set showcmd
 " use emacs-style tab completion when selecting files, etc
 set wildmode=longest,list
 " make tab completion for files/buffers act like bash
-let mapleader=","
+let mapleader="\<Space>"
 
 set modelines=0 " prevents some security exploits having to do with modelines in files.
 
@@ -256,7 +253,7 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'tpope/vim-surround'
 " Plugin 'tpope/vim-markdown'
-Plugin 'tpope/vim-fugitive'
+" Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-repeat'
 " Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-ragtag'
@@ -265,7 +262,6 @@ Plugin 'tpope/vim-ragtag'
 "Plugin 'fs111/pydoc.vim'
 Plugin 'terryma/vim-multiple-cursors'
 " Plugin 'fatih/vim-go.git'
-Plugin 'chriskempson/base16-vim'
 Plugin 'kien/ctrlp.vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'jelera/vim-javascript-syntax'
@@ -281,32 +277,35 @@ Plugin 'ap/vim-css-color'
 Plugin 'def-lkb/ocp-indent-vim'
 " Plugin 'sergi/vim-pml'
 Plugin 'panozzaj/vim-autocorrect'
-Plugin 'tomtom/tlib_vim'
-Plugin 'MarcWeber/vim-addon-mw-utils'
+"Plugin 'tomtom/tlib_vim'
+"Plugin 'MarcWeber/vim-addon-mw-utils'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'regedarek/ZoomWin'
-Plugin 'amdt/vim-niji'
+"Plugin 'amdt/vim-niji'
 Plugin 'mephux/vim-jsfmt'
 Plugin 'mxw/vim-jsx'
 "Plugin 'tpope/vim-fireplace'
 "Plugin 'tpope/vim-leiningen'
 Plugin 'rking/ag.vim'
-Plugin 'cespare/vim-sbd'
+"Plugin 'cespare/vim-sbd'
 Plugin 'jpalardy/vim-slime'
 Plugin 'vim-scripts/paredit.vim'
 Plugin 'xolox/vim-misc.git'
 Plugin 'xolox/vim-session'
-Plugin 'sergi/vim-chicken-doc'
-Plugin 'ervandew/supertab'
+"Plugin 'sergi/vim-chicken-doc'
+"Plugin 'ervandew/supertab'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'bling/vim-airline'
 Plugin 'wlangstroth/vim-racket'
 Plugin 'kien/rainbow_parentheses.vim'
+Plugin 'nanotech/jellybeans.vim'
 
 " Markdown
 Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
+
+"Plugin 'elixir-lang/vim-elixir'
 
 let g:vim_markdown_frontmatter=1
 let g:netrw_liststyle=3
@@ -335,9 +334,6 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 set showmode                      " Display the mode you're in.
 set guifont=Consolas\ for\ Powerline:h16
 set number
-
-"let &showbreak='~'
-set gdefault "global replace
 
 " folds {{{
 nnoremap zr zr:echo &foldlevel<cr>
@@ -401,8 +397,7 @@ iab funciton function
 command! W :w
 set t_Co=256
 "colorscheme tomorrow-night
-let base16colorspace=256
-colorscheme base16-tomorrow
+colorscheme jellybeans
 
 " Rainbox Parentheses {{{
 
@@ -451,6 +446,20 @@ nnoremap <silent> # #zz
 nnoremap <silent> g* g*zz
 nnoremap <silent> g# g#zz
 
+" Type <Space>o to open a new file
+nnoremap <Leader>o :CtrlP<CR>
+" Type <Space>w to save file (a lot faster than :w<Enter>)
+nnoremap <Leader>w :w<CR>
+" Enter visual line mode with <Space><Space>:
+nmap <Leader><Leader> V
+"Copy & paste to system clipboard with <Space>p and <Space>y:
+vmap <Leader>y "+y
+vmap <Leader>d "+d
+nmap <Leader>p "+p
+nmap <Leader>P "+P
+vmap <Leader>p "+p
+vmap <Leader>P "+P
+
 let g:ctrlp_working_path_mode = 'r'
 " let g:ctrlp_working_path_mode = 0
 " let g:ctrlp_cmd = 'CtrlPMRU .'
@@ -466,11 +475,15 @@ let g:syntastic_warning_symbol = '!'
 
 let g:syntastic_ocaml_use_ocamlc = 1
 
-"let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-"let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-
-"let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-"let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+if exists('$ITERM_PROFILE')
+  if exists('$TMUX')
+    let &t_SI = "\<Esc>[3 q"
+    let &t_EI = "\<Esc>[0 q"
+  else
+    let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+    let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+  endif
+end
 
 " set 'updatetime' to 15 seconds when in insert mode
 au InsertEnter * let updaterestore=&updatetime | set updatetime=15000
@@ -555,11 +568,9 @@ command! PasteWithPasteMode call PasteWithPasteMode()
 nnoremap <silent> <leader>p :PasteWithPasteMode<CR>
 
 "Append this to your .vimrc to add merlin to vim's runtime-path:
-let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
+let g:opamshare = substitute(system('opam config var share'),'\n$','',''')
 execute "set rtp+=" . g:opamshare . "/merlin/vim"
 
-"Also run the following line in vim to index the documentation:
-:execute "helptags " . g:opamshare . "/merlin/vim/doc"
 let g:syntastic_ocaml_checkers = ['merlin']
 
 if $TMUX == ''
@@ -588,7 +599,7 @@ inoremap kj <esc>
 let g:airline_powerline_fonts = 1
 
 func! WordProcessorMode()
-  setlocal formatoptions=1
+  setlocal formatoptions=cqt
   " setlocal noexpandtab
   map j gj
   map k gk
@@ -600,3 +611,8 @@ func! WordProcessorMode()
   setlocal linebreak
 endfu
 com! WP call WordProcessorMode()
+
+if exists('$TMUX')
+  set term=screen-256color
+endif
+

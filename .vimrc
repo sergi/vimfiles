@@ -568,7 +568,7 @@ command! PasteWithPasteMode call PasteWithPasteMode()
 nnoremap <silent> <leader>p :PasteWithPasteMode<CR>
 
 "Append this to your .vimrc to add merlin to vim's runtime-path:
-let g:opamshare = substitute(system('opam config var share'),'\n$','',''')
+let g:opamshare = substitute(system('opam config var share'),'\n$','','')
 execute "set rtp+=" . g:opamshare . "/merlin/vim"
 
 let g:syntastic_ocaml_checkers = ['merlin']

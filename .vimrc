@@ -300,6 +300,8 @@ Plugin 'bling/vim-airline'
 Plugin 'wlangstroth/vim-racket'
 Plugin 'kien/rainbow_parentheses.vim'
 Plugin 'nanotech/jellybeans.vim'
+Plugin 'w0ng/vim-hybrid'
+Plugin 'NLKNguyen/papercolor-theme'
 
 " Markdown
 Plugin 'godlygeek/tabular'
@@ -396,8 +398,8 @@ iab funciton function
 " for mistyping :w as :W
 command! W :w
 set t_Co=256
-"colorscheme tomorrow-night
-colorscheme jellybeans
+colorscheme hybrid
+let g:hybrid_use_Xresources = 1
 
 " Rainbox Parentheses {{{
 

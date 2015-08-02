@@ -1,6 +1,7 @@
 set nocompatible
+
 " }}}
-" Basic options ----------------------------------------------------------- {{{
+" Basic options -----------------------------------------------------------
 
 set visualbell
 set history=1000
@@ -308,6 +309,10 @@ Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
 
 "Plugin 'elixir-lang/vim-elixir'
+Plugin 'lambdatoast/elm.vim'
+
+"Scala
+"Plugin 'derekwyatt/vim-scala'
 
 let g:vim_markdown_frontmatter=1
 let g:netrw_liststyle=3
@@ -461,6 +466,12 @@ nmap <Leader>p "+p
 nmap <Leader>P "+P
 vmap <Leader>p "+p
 vmap <Leader>P "+P
+
+" Insert newline without entering Insert
+nmap <CR> m`o<Esc>``
+" Map ✠ (U+2720) to <S-CR>, so we have <S-CR> mapped to ✠ in iTerm2 and
+" ✠ mapped back to <S-CR> in Vim.
+nmap ✠ m`O<Esc>``
 
 let g:ctrlp_working_path_mode = 'r'
 " let g:ctrlp_working_path_mode = 0
@@ -618,3 +629,4 @@ if exists('$TMUX')
   set term=screen-256color
 endif
 
+let delimitMate_expand_cr = 2

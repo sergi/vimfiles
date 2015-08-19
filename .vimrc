@@ -339,7 +339,9 @@ let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 set showmode                      " Display the mode you're in.
-set guifont=Consolas\ for\ Powerline:h16
+set guifont=Inconsolata-dz\ for\ Powerline
+set fillchars+=stl:\ ,stlnc:\
+
 set number
 
 " folds {{{
@@ -378,6 +380,8 @@ nnoremap k gk
 
 set encoding=utf-8
 set fileencoding=utf-8
+set termencoding=utf-8
+
 set relativenumber
 set ruler                         " Show cursor position.
 set backspace=indent,eol,start    " Intuitive backspacing.
@@ -479,7 +483,7 @@ let g:ctrlp_working_path_mode = 'r'
 
 let g:syntastic_check_on_open=1
 let g:syntastic_enable_signs=1
-let g:syntastic_javascript_checkers = ['gjslint', 'eslint']
+let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_javascript_gjslint_args="--nojsdoc"
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '!'
@@ -610,6 +614,8 @@ nnoremap <leader>sv :source $MYVIMRC<cr>
 inoremap kj <esc>
 
 let g:airline_powerline_fonts = 1
+let g:airline#extensions#syntastic#enabled = 1
+let g:airline#extensions#hunks#enabled = 1
 
 func! WordProcessorMode()
   setlocal formatoptions=cqt

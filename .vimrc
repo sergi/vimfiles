@@ -238,7 +238,7 @@ set showcmd
 " use emacs-style tab completion when selecting files, etc
 set wildmode=longest,list
 " make tab completion for files/buffers act like bash
-let mapleader="\<Space>"
+let mapleader=","
 
 set modelines=0 " prevents some security exploits having to do with modelines in files.
 
@@ -251,10 +251,13 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
 
+Plugin 'Shougo/neocomplete.vim'
+Plugin 'Shougo/neosnippet.vim'
+Plugin 'Shougo/neosnippet-snippets'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'tpope/vim-surround'
 " Plugin 'tpope/vim-markdown'
-" Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-repeat'
 " Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-ragtag'
@@ -266,7 +269,6 @@ Plugin 'terryma/vim-multiple-cursors'
 Plugin 'kien/ctrlp.vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'jelera/vim-javascript-syntax'
-Plugin 'marijnh/tern_for_vim'
 Plugin 'Raimondi/delimitMate'
 Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'scrooloose/syntastic'
@@ -280,8 +282,8 @@ Plugin 'def-lkb/ocp-indent-vim'
 Plugin 'panozzaj/vim-autocorrect'
 "Plugin 'tomtom/tlib_vim'
 "Plugin 'MarcWeber/vim-addon-mw-utils'
-Plugin 'SirVer/ultisnips'
-Plugin 'honza/vim-snippets'
+"Plugin 'SirVer/ultisnips'
+"Plugin 'honza/vim-snippets'
 Plugin 'regedarek/ZoomWin'
 "Plugin 'amdt/vim-niji'
 Plugin 'mephux/vim-jsfmt'
@@ -313,6 +315,7 @@ Plugin 'lambdatoast/elm.vim'
 
 "Scala
 "Plugin 'derekwyatt/vim-scala'
+Plugin 'marijnh/tern_for_vim'
 
 let g:vim_markdown_frontmatter=1
 let g:netrw_liststyle=3
@@ -636,3 +639,37 @@ if exists('$TMUX')
 endif
 
 let delimitMate_expand_cr = 2
+
+" Tern goodness
+let g:tern_map_keys = 1
+let g:tern_show_argument_hints = 'on_hold'
+autocmd FileType javascript setlocal omnifunc=tern#Complete
+let g:neocomplete#enable_at_startup = 1
+
+" Plugin key-mappings.
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+" SuperTab like snippets behavior.
+imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: pumvisible() ? "\<C-n>" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: "\<TAB>"
+
+" For conceal markers.
+if has('conceal')
+  set conceallevel=2 concealcursor=niv
+endif
+
+function! Multiple_cursors_before()
+  exe 'NeoCompleteLock'
+  echo 'Disabled autocomplete'
+endfunction
+
+function! Multiple_cursors_after()
+  exe 'NeoCompleteUnlock'
+  echo 'Enabled autocomplete'
+endfunction

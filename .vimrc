@@ -6,20 +6,19 @@ set nocompatible
 set visualbell
 set history=1000
 set undoreload=10000
-set list
+set list                " Display whitespace
 set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
-set lazyredraw
+set lazyredraw          " Redraw only when we need to."
 set showbreak=↪
-set splitbelow
-set splitright
-set autowrite
+set splitbelow          " Make the new window appear below the current window.
+set splitright          " Make the new window appear on the right
+set autowrite           " Save the file when you switch buffers
 set autoread
-set shiftround
-set title
-set linebreak
+set shiftround          " use multiple of shiftwidth when indenting with '<' and '>'
+set title               " change the terminal's title
+set linebreak           " only wrap at a character in the breakat option
 set colorcolumn=+1
-" Remove message from when you start vim
-set shortmess+=I
+set shortmess+=I        " Remove message from when you start vim
 
 " Spelling
 "
@@ -60,17 +59,6 @@ set backupskip=/tmp/*,/private/tmp/*"
 
 " Resize splits when the window is resized
 au VimResized * :wincmd =
-
-" Cursorline {{{
-" Only show cursorline in the current window and in normal mode.
-
-augroup cline
-    au!
-    au WinLeave,InsertEnter * set nocursorline
-    au WinEnter,InsertLeave * set cursorline
-augroup END
-
-" }}}
 
 " Backups {{{
 
@@ -145,25 +133,26 @@ nnoremap J mzJ`z
 nnoremap <F6> :set paste!<cr>
 
 
-set tabstop=2
+set tabstop=4       " number of visual spaces per TAB"
+set softtabstop=4   " number of spaces in tab when editing"
+set expandtab
+set smartindent
+"set smarttab        "use shiftwidth to enter tabs
 set shiftwidth=2
 set autoindent
-set smartindent
-set expandtab
-set smarttab                                        "use shiftwidth to enter tabs
 
 " Toggle line numbers
 nnoremap <leader>l :setlocal number!<cr>
 
 set laststatus=2 " Always show the statusline
-set incsearch
-set hlsearch
+set incsearch           " search as characters are entered
+set hlsearch            " highlight matches
 " make searches case-sensitive only if they contain upper-case characters
 set ignorecase smartcase
-" highlight current line
-set cursorline
+set cursorline          " highlight current line"
 "set cmdheight=2
 set switchbuf=useopen
+set number              " show line numbers"
 set numberwidth=5
 set background=dark
 set mouse=a
@@ -186,7 +175,7 @@ set t_ti= t_te=
 " ---------------
 syntax enable
 "set autoread " Automatically reload changes if detected
-set wildmenu " Turn on WiLd menu
+set wildmenu " visual autocomplete for command menu
 set hidden " Change buffer - without saving
 set cf " Enable error files & error jumping.
 "set clipboard+=unnamed " Yanks go on clipboard instead.
@@ -203,7 +192,7 @@ set switchbuf=useopen " Switch to an existing buffer if one exists
 " ---------------
 " Visual
 " ---------------
-set showmatch " Show matching brackets.
+set showmatch           " highlight matching [{()}]
 set matchtime=2 " How many tenths of a second to blink
 " Show trailing spaces as dots and carrots for extended lines.
 " From Janus, http://git.io/PLbAlw
@@ -268,7 +257,7 @@ Plugin 'terryma/vim-multiple-cursors'
 " Plugin 'fatih/vim-go.git'
 Plugin 'kien/ctrlp.vim'
 Plugin 'pangloss/vim-javascript'
-Plugin 'jelera/vim-javascript-syntax'
+"Plugin 'jelera/vim-javascript-syntax'
 Plugin 'Raimondi/delimitMate'
 Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'scrooloose/syntastic'
@@ -286,7 +275,7 @@ Plugin 'panozzaj/vim-autocorrect'
 "Plugin 'honza/vim-snippets'
 Plugin 'regedarek/ZoomWin'
 "Plugin 'amdt/vim-niji'
-Plugin 'mephux/vim-jsfmt'
+"Plugin 'mephux/vim-jsfmt'
 Plugin 'mxw/vim-jsx'
 "Plugin 'tpope/vim-fireplace'
 "Plugin 'tpope/vim-leiningen'
@@ -302,7 +291,7 @@ Plugin 'editorconfig/editorconfig-vim'
 Plugin 'bling/vim-airline'
 Plugin 'wlangstroth/vim-racket'
 Plugin 'kien/rainbow_parentheses.vim'
-Plugin 'nanotech/jellybeans.vim'
+"Plugin 'nanotech/jellybeans.vim'
 Plugin 'w0ng/vim-hybrid'
 Plugin 'NLKNguyen/papercolor-theme'
 
@@ -328,7 +317,7 @@ nnoremap <silent> <leader>bdm   :Sbdm<CR>
 
 " --- type _ to search the word in all files in the current dir
 " nmap _ :Ag <c-r>=expand("<cword>")<cr><cr>
-nnoremap <space>/ :Ag"
+nnoremap <leader>a :Ag"
 
 inoremap <C-c> <CR><Esc>O
 
@@ -345,7 +334,6 @@ set showmode                      " Display the mode you're in.
 set guifont=Inconsolata-dz\ for\ Powerline
 set fillchars+=stl:\ ,stlnc:\
 
-set number
 
 " folds {{{
 nnoremap zr zr:echo &foldlevel<cr>
@@ -369,6 +357,8 @@ set listchars=tab:▸\ ,eol:¬
 " inoremap <down> <nop>
 " inoremap <left> <nop>
 " inoremap <right> <nop>
+
+" move vertically by visual line
 nnoremap j gj
 nnoremap k gk
 
@@ -406,11 +396,12 @@ endif
 autocmd! BufWrite * mark ' | silent! %s/\s\+$// | norm ''
 
 iab funciton function
+iab JAvaScript JavaScript
 
 " for mistyping :w as :W
 command! W :w
 set t_Co=256
-colorscheme hybrid
+colorscheme PaperColor
 let g:hybrid_use_Xresources = 1
 
 " Rainbox Parentheses {{{
@@ -486,8 +477,9 @@ let g:ctrlp_working_path_mode = 'r'
 
 let g:syntastic_check_on_open=1
 let g:syntastic_enable_signs=1
+"let g:syntastic_javascript_checkers = ['eslint', 'standard']
 let g:syntastic_javascript_checkers = ['eslint']
-let g:syntastic_javascript_gjslint_args="--nojsdoc"
+"let g:syntastic_javascript_gjslint_args="--nojsdoc"
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '!'
 " highlight SyntasticErrorSign guifg=red guibg=red
@@ -673,3 +665,6 @@ function! Multiple_cursors_after()
   exe 'NeoCompleteUnlock'
   echo 'Enabled autocomplete'
 endfunction
+
+let g:EditorConfig_core_mode = 'external_command'
+

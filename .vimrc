@@ -19,6 +19,7 @@ set title               " change the terminal's title
 set linebreak           " only wrap at a character in the breakat option
 set colorcolumn=+1
 set shortmess+=I        " Remove message from when you start vim
+set nowrap
 
 " Spelling
 "
@@ -250,6 +251,7 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-repeat'
 " Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-ragtag'
+Plugin 'tpope/vim-unimpaired'
 "Plugin 'sjl/gundo.vim'
 "Plugin 'vim-scripts/pep8'
 "Plugin 'fs111/pydoc.vim'
@@ -258,6 +260,10 @@ Plugin 'terryma/vim-multiple-cursors'
 Plugin 'kien/ctrlp.vim'
 Plugin 'pangloss/vim-javascript'
 "Plugin 'jelera/vim-javascript-syntax'
+Plugin 'othree/yajs.vim'
+Plugin 'othree/jsdoc-syntax.vim'
+Plugin 'gavocanov/vim-js-indent'
+Plugin 'mxw/vim-jsx'
 Plugin 'Raimondi/delimitMate'
 Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'scrooloose/syntastic'
@@ -276,7 +282,6 @@ Plugin 'panozzaj/vim-autocorrect'
 Plugin 'regedarek/ZoomWin'
 "Plugin 'amdt/vim-niji'
 "Plugin 'mephux/vim-jsfmt'
-Plugin 'mxw/vim-jsx'
 "Plugin 'tpope/vim-fireplace'
 "Plugin 'tpope/vim-leiningen'
 Plugin 'rking/ag.vim'
@@ -475,11 +480,18 @@ let g:ctrlp_working_path_mode = 'r'
 " let g:ctrlp_working_path_mode = 0
 " let g:ctrlp_cmd = 'CtrlPMRU .'
 
-let g:syntastic_check_on_open=1
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+"let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 let g:syntastic_enable_signs=1
-"let g:syntastic_javascript_checkers = ['eslint', 'standard']
-let g:syntastic_javascript_checkers = ['eslint']
-"let g:syntastic_javascript_gjslint_args="--nojsdoc"
+let g:syntastic_javascript_checkers = ['eslint', 'gjslint']
+"let g:syntastic_javascript_eslint_exec = 'eslint_d'
+let g:syntastic_javascript_gjslint_args="--nojsdoc"
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '!'
 " highlight SyntasticErrorSign guifg=red guibg=red
@@ -667,4 +679,5 @@ function! Multiple_cursors_after()
 endfunction
 
 let g:EditorConfig_core_mode = 'external_command'
-
+let g:jsx_ext_required = 0 " Allow JSX in normal JS files"
+let NERDSpaceDelims=1 " Add whitespace before comment

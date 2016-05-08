@@ -136,10 +136,10 @@ nnoremap <F6> :set paste!<cr>
 
 set tabstop=4       " number of visual spaces per TAB"
 set softtabstop=4   " number of spaces in tab when editing"
+set shiftwidth=2
 set expandtab
 set smartindent
 "set smarttab        "use shiftwidth to enter tabs
-set shiftwidth=2
 set autoindent
 
 " Toggle line numbers
@@ -256,7 +256,7 @@ Plugin 'tpope/vim-unimpaired'
 "Plugin 'vim-scripts/pep8'
 "Plugin 'fs111/pydoc.vim'
 Plugin 'terryma/vim-multiple-cursors'
-" Plugin 'fatih/vim-go.git'
+Plugin 'fatih/vim-go'
 Plugin 'kien/ctrlp.vim'
 Plugin 'pangloss/vim-javascript'
 "Plugin 'jelera/vim-javascript-syntax'
@@ -288,11 +288,9 @@ Plugin 'rking/ag.vim'
 "Plugin 'cespare/vim-sbd'
 Plugin 'jpalardy/vim-slime'
 Plugin 'vim-scripts/paredit.vim'
-Plugin 'xolox/vim-misc.git'
-Plugin 'xolox/vim-session'
 "Plugin 'sergi/vim-chicken-doc'
 "Plugin 'ervandew/supertab'
-Plugin 'editorconfig/editorconfig-vim'
+" Plugin 'editorconfig/editorconfig-vim'
 Plugin 'bling/vim-airline'
 Plugin 'wlangstroth/vim-racket'
 Plugin 'kien/rainbow_parentheses.vim'
@@ -515,9 +513,6 @@ au InsertLeave * let &updatetime=updaterestore
 " Automatically leave insert mode after 'updatetime' (4s by default).
 au CursorHoldI * stopinsert
 
-"Go Language Stuff
-au FileType go au BufWritePre <buffer> Fmt "Format on save
-
 set omnifunc=syntaxcomplete#Complete
 let g:tern_map_keys=1
 let g:tern_show_argument_hints='on_hold'
@@ -603,12 +598,8 @@ endif
 " Toggle Paste mode
 noremap <silent> <leader>o :set paste!<CR>
 
-let g:syntastic_racket_code_ayatollah_script = '/Users/sergi/.vim/code-ayatollah.rkt'
-
 " More granular undo (undo step after each space)
 inoremap <Space> <Space><C-G>u
-
-let g:session_autoload = 'no'
 
 " Sergi's mappings
 nnoremap <leader>- ddp

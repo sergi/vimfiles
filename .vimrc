@@ -1,5 +1,8 @@
 set nocompatible
 
+
+
+
 " }}}
 " Basic options -----------------------------------------------------------
 
@@ -7,7 +10,6 @@ set visualbell
 set history=1000
 set undoreload=10000
 set list                " Display whitespace
-set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
 set lazyredraw          " Redraw only when we need to."
 set showbreak=↪
 set splitbelow          " Make the new window appear below the current window.
@@ -17,7 +19,6 @@ set autoread
 set shiftround          " use multiple of shiftwidth when indenting with '<' and '>'
 set title               " change the terminal's title
 set linebreak           " only wrap at a character in the breakat option
-set colorcolumn=+1
 set shortmess+=I        " Remove message from when you start vim
 set nowrap
 
@@ -83,21 +84,6 @@ endif
 
 " }}}
 
-" Copying text to the system clipboard.
-"
-" For some reason Vim no longer wants to talk to the OS X pasteboard through "*.
-" Computers are bullshit.
-function! g:FuckingCopyTheTextPlease()
-  let old_z = @z
-  normal! gv"zy
-  call system('pbcopy', @z)
-  let @z = old_z
-endfunction
-noremap <leader>p :silent! set paste<CR>"*p:set nopaste<CR>
-" noremap <leader>p mz:r!pbpaste<cr>`z
-vnoremap <leader>y :<c-u>call g:FuckingCopyTheTextPlease()<cr>
-nnoremap <leader>y VV:<c-u>call g:FuckingCopyTheTextPlease()<cr>
-
 " "Uppercase word" mapping.
 "
 " This mapping allows you to press <c-u> in insert mode to convert the current
@@ -127,21 +113,6 @@ inoremap <C-u> <esc>mzgUiw`za
 " Keep the cursor in place while joining lines
 nnoremap J mzJ`z
 
-" Toggle paste
-" For some reason pastetoggle doesn't redraw the screen (thus the status bar
-" doesn't change) while :set paste! does, so I use that instead.
-" set pastetoggle=<F6>
-nnoremap <F6> :set paste!<cr>
-
-
-set tabstop=4       " number of visual spaces per TAB"
-set softtabstop=4   " number of spaces in tab when editing"
-set shiftwidth=2
-set expandtab
-set smartindent
-"set smarttab        "use shiftwidth to enter tabs
-set autoindent
-
 " Toggle line numbers
 nnoremap <leader>l :setlocal number!<cr>
 
@@ -152,7 +123,6 @@ set hlsearch            " highlight matches
 set ignorecase smartcase
 set cursorline          " highlight current line"
 "set cmdheight=2
-set switchbuf=useopen
 set number              " show line numbers"
 set numberwidth=5
 set background=dark
@@ -232,84 +202,69 @@ let mapleader=","
 
 set modelines=0 " prevents some security exploits having to do with modelines in files.
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
+" Plug
+" Setting up Plug - A minimalist Vim plugin manager
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -sfLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall | source ~/.vimrc
+endif
 
-" let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
+call plug#begin('~/.vim/bundle')
+Plug 'Shougo/neocomplete.vim'
+Plug 'Shougo/neosnippet.vim'
+Plug 'Shougo/neosnippet-snippets'
+" Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+Plug 'scrooloose/nerdcommenter'
+Plug 'scrooloose/syntastic'
+Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-surround'
+" Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-ragtag', { 'for': ['html', 'xml', 'pml'] }
+Plug 'tpope/vim-unimpaired'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'fatih/vim-go', { 'for': 'go' }
+Plug 'ctrlpvim/ctrlp.vim', { 'on':  'CtrlP' }
+Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
+Plug 'jason0x43/vim-js-indent', { 'for': 'javascript' }
+" Plug 'leafgarland/typescript-vim'
+" Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
+Plug 'othree/jsdoc-syntax.vim', { 'for': ['javascript'] }
+Plug 'mxw/vim-jsx'
+Plug 'Raimondi/delimitMate'
+Plug 'nathanaelkane/vim-indent-guides'
+" Plug 'Lokaltog/vim-easymotion'
+Plug 'justinmk/vim-sneak'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'airblade/vim-gitgutter'
+Plug 'ap/vim-css-color'
+" Plug 'panozzaj/vim-autocorrect'
+Plug 'regedarek/ZoomWin'
+Plug 'jpalardy/vim-slime', { 'for': ['clojure', 'scheme', 'ocaml'] }
+Plug 'kovisoft/paredit', { 'for': ['clojure', 'scheme'] }
+" Plug 'bling/vim-airline'
+Plug 'itchyny/lightline.vim'
 
-Plugin 'Shougo/neocomplete.vim'
-Plugin 'Shougo/neosnippet.vim'
-Plugin 'Shougo/neosnippet-snippets'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'tpope/vim-surround'
-" Plugin 'tpope/vim-markdown'
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-repeat'
-" Plugin 'tpope/vim-commentary'
-Plugin 'tpope/vim-ragtag'
-Plugin 'tpope/vim-unimpaired'
-"Plugin 'sjl/gundo.vim'
-"Plugin 'vim-scripts/pep8'
-"Plugin 'fs111/pydoc.vim'
-Plugin 'terryma/vim-multiple-cursors'
-Plugin 'fatih/vim-go'
-Plugin 'kien/ctrlp.vim'
-Plugin 'pangloss/vim-javascript'
-"Plugin 'jelera/vim-javascript-syntax'
-Plugin 'othree/yajs.vim'
-Plugin 'othree/jsdoc-syntax.vim'
-Plugin 'gavocanov/vim-js-indent'
-Plugin 'mxw/vim-jsx'
-Plugin 'Raimondi/delimitMate'
-Plugin 'nathanaelkane/vim-indent-guides'
-Plugin 'scrooloose/syntastic'
-" Plugin 'Lokaltog/vim-easymotion'
-Plugin 'christoomey/vim-tmux-navigator'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'ap/vim-css-color'
-"Plugin 'scrooloose/nerdtree'
-Plugin 'def-lkb/ocp-indent-vim'
-" Plugin 'sergi/vim-pml'
-Plugin 'panozzaj/vim-autocorrect'
-"Plugin 'tomtom/tlib_vim'
-"Plugin 'MarcWeber/vim-addon-mw-utils'
-"Plugin 'SirVer/ultisnips'
-"Plugin 'honza/vim-snippets'
-Plugin 'regedarek/ZoomWin'
-"Plugin 'amdt/vim-niji'
-"Plugin 'mephux/vim-jsfmt'
-"Plugin 'tpope/vim-fireplace'
-"Plugin 'tpope/vim-leiningen'
-Plugin 'rking/ag.vim'
-"Plugin 'cespare/vim-sbd'
-Plugin 'jpalardy/vim-slime'
-Plugin 'vim-scripts/paredit.vim'
-"Plugin 'sergi/vim-chicken-doc'
-"Plugin 'ervandew/supertab'
-" Plugin 'editorconfig/editorconfig-vim'
-Plugin 'bling/vim-airline'
-Plugin 'wlangstroth/vim-racket'
-Plugin 'kien/rainbow_parentheses.vim'
-"Plugin 'nanotech/jellybeans.vim'
-Plugin 'w0ng/vim-hybrid'
-Plugin 'NLKNguyen/papercolor-theme'
+Plug 'wlangstroth/vim-racket', { 'for': ['scheme'] }
+Plug 'kien/rainbow_parentheses.vim', { 'for': ['clojure', 'scheme'] }
+Plug 'NLKNguyen/papercolor-theme'
 
 " Markdown
-Plugin 'godlygeek/tabular'
-Plugin 'plasticboy/vim-markdown'
+Plug 'godlygeek/tabular', { 'for': ['markdown', 'txt'] }
+Plug 'junegunn/goyo.vim', { 'for': 'markdown' }
+" Plug 'lambdatoast/elm.vim'
+Plug 'marijnh/tern_for_vim', { 'for': ['javascript'], 'do': 'npm install' }
 
-"Plugin 'elixir-lang/vim-elixir'
-Plugin 'lambdatoast/elm.vim'
+" Tern goodness
+autocmd FileType javascript setlocal omnifunc=tern#Complete
 
-"Scala
-"Plugin 'derekwyatt/vim-scala'
-Plugin 'marijnh/tern_for_vim'
+call plug#end()
 
-let g:vim_markdown_frontmatter=1
+let g:tern_map_keys = 1
+
+let g:tern_show_argument_hints = 'on_hold'
+let g:sneak#streak = 1
+
 let g:netrw_liststyle=3
 
 let g:slime_target = "tmux"
@@ -324,7 +279,6 @@ nnoremap <leader>a :Ag"
 
 inoremap <C-c> <CR><Esc>O
 
-call vundle#end()
 filetype off
 filetype plugin indent on
 
@@ -335,7 +289,6 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 set showmode                      " Display the mode you're in.
 set guifont=Inconsolata-dz\ for\ Powerline
-set fillchars+=stl:\ ,stlnc:\
 
 
 " folds {{{
@@ -345,32 +298,13 @@ nnoremap zR zR:echo &foldlevel<cr>
 nnoremap zM zM:echo &foldlevel<cr>
 " }}}
 
-set wrap
 set textwidth=79
 "set formatoptions=qrn1
 set colorcolumn=80
 
-set listchars=tab:▸\ ,eol:¬
-
-" nnoremap <up> <nop>
-" nnoremap <down> <nop>
-" nnoremap <left> <nop>
-" nnoremap <right> <nop>
-" inoremap <up> <nop>
-" inoremap <down> <nop>
-" inoremap <left> <nop>
-" inoremap <right> <nop>
-
 " move vertically by visual line
 nnoremap j gj
 nnoremap k gk
-
-" open a new vertical split and switch over to it.
-"nnoremap <leader>w <C-w>v<C-w>l
-"nnoremap <C-h> <C-w>h
-"nnoremap <C-j> <C-w>j
-"nnoremap <C-k> <C-w>k
-"nnoremap <C-l> <C-w>l
 
 " au FocusLost * :wa " Save on lost focus
 
@@ -390,11 +324,6 @@ set wildignore+=vendor,log,tmp,*.swp,*.o,*.obj,*.pyc,*.swc,*.DS_STORE,*.bkp,*.o,
 "set lines=60 columns=180
 nnoremap <F4> :buffers<CR>:buffer<space>
 
-"Remove MacVim's toolbar
-if has("gui_running")
-  set guioptions=egmrt
-endif
-
 " on save any: trim trailing whitespace
 autocmd! BufWrite * mark ' | silent! %s/\s\+$// | norm ''
 
@@ -405,7 +334,7 @@ iab JAvaScript JavaScript
 command! W :w
 set t_Co=256
 colorscheme PaperColor
-let g:hybrid_use_Xresources = 1
+" let g:hybrid_use_Xresources = 1
 
 " Rainbox Parentheses {{{
 
@@ -514,8 +443,6 @@ au InsertLeave * let &updatetime=updaterestore
 au CursorHoldI * stopinsert
 
 set omnifunc=syntaxcomplete#Complete
-let g:tern_map_keys=1
-let g:tern_show_argument_hints='on_hold'
 map <Leader> <Plug>(easymotion-prefix)
 
 set term=screen-256color
@@ -545,7 +472,7 @@ nnoremap F :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 let g:ctrlp_max_files=0
 
-let g:gitgutter_max_signs=5000
+let g:gitgutter_max_signs=3000
 
 " PML file settings
 augroup filetype_pml
@@ -555,8 +482,6 @@ augroup filetype_pml
     autocmd FileType pml call AutoCorrect()
     au BufRead,BufNewFile *.pml setlocal spell
 augroup END
-
-iab JAvaScript JavaScript
 
 " Omni Completion settings
 set completeopt=longest,menuone
@@ -587,14 +512,15 @@ command! PasteWithPasteMode call PasteWithPasteMode()
 nnoremap <silent> <leader>p :PasteWithPasteMode<CR>
 
 "Append this to your .vimrc to add merlin to vim's runtime-path:
-let g:opamshare = substitute(system('opam config var share'),'\n$','','')
-execute "set rtp+=" . g:opamshare . "/merlin/vim"
+" let g:opamshare = substitute(system('opam config var share'),'\n$','','')
+" execute "set rtp+=" . g:opamshare . "/merlin/vim"
 
-let g:syntastic_ocaml_checkers = ['merlin']
+" let g:syntastic_ocaml_checkers = ['merlin']
 
 if $TMUX == ''
   set clipboard+=unnamed
 endif
+
 " Toggle Paste mode
 noremap <silent> <leader>o :set paste!<CR>
 
@@ -604,42 +530,19 @@ inoremap <Space> <Space><C-G>u
 " Sergi's mappings
 nnoremap <leader>- ddp
 nnoremap <leader>_ kddpk
-
 inoremap <c-u> <esc>viw~i
-
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 inoremap kj <esc>
 
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#syntastic#enabled = 1
-let g:airline#extensions#hunks#enabled = 1
-
-func! WordProcessorMode()
-  setlocal formatoptions=cqt
-  " setlocal noexpandtab
-  map j gj
-  map k gk
-  setlocal spell spelllang=en_us
-  set thesaurus+=/Users/sbrown/.vim/thesaurus/mthesaur.txt
-  set complete+=s
-  set formatprg=par
-  setlocal wrap
-  setlocal linebreak
-endfu
-com! WP call WordProcessorMode()
-
-if exists('$TMUX')
-  set term=screen-256color
-endif
-
+" let g:airline_powerline_fonts = 1
+" let g:airline#extensions#syntastic#enabled = 1
+" let g:airline#extensions#hunks#enabled = 1
 let delimitMate_expand_cr = 2
-
-" Tern goodness
-let g:tern_map_keys = 1
-let g:tern_show_argument_hints = 'on_hold'
-autocmd FileType javascript setlocal omnifunc=tern#Complete
 let g:neocomplete#enable_at_startup = 1
+let g:EditorConfig_core_mode = 'external_command'
+let g:jsx_ext_required = 0 " Allow JSX in normal JS files"
+let NERDSpaceDelims=1 " Add whitespace before comment
 
 " Plugin key-mappings.
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
@@ -669,6 +572,16 @@ function! Multiple_cursors_after()
   echo 'Enabled autocomplete'
 endfunction
 
-let g:EditorConfig_core_mode = 'external_command'
-let g:jsx_ext_required = 0 " Allow JSX in normal JS files"
-let NERDSpaceDelims=1 " Add whitespace before comment
+
+func! WordProcessorMode()
+  setlocal formatoptions=cqt
+  map j gj
+  map k gk
+  setlocal spell spelllang=en_us
+  set thesaurus+=/Users/sbrown/.vim/thesaurus/mthesaur.txt
+  set complete+=s
+  set formatprg=par
+  setlocal wrap
+  setlocal linebreak
+endfu
+com! WP call WordProcessorMode()

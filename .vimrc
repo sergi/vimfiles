@@ -1,8 +1,5 @@
 set nocompatible
 
-
-
-
 " }}}
 " Basic options -----------------------------------------------------------
 
@@ -558,9 +555,9 @@ smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
 \: "\<TAB>"
 
 " For conceal markers.
-if has('conceal')
-  set conceallevel=2 concealcursor=niv
-endif
+" if has('conceal')
+  " set conceallevel=2 concealcursor=niv
+" endif
 
 function! Multiple_cursors_before()
   exe 'NeoCompleteLock'

@@ -1,5 +1,6 @@
 set nocompatible
 
+
 " }}}
 " Basic options -----------------------------------------------------------
 
@@ -219,15 +220,13 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-ragtag', { 'for': ['html', 'xml', 'pml'] }
 Plug 'tpope/vim-unimpaired'
+
+Plug 'sheerun/vim-polyglot'
+
 Plug 'terryma/vim-multiple-cursors'
-Plug 'fatih/vim-go', { 'for': 'go' }
-Plug 'ctrlpvim/ctrlp.vim', { 'on':  'CtrlP' }
-Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
+Plug 'ctrlpvim/ctrlp.vim'
 Plug 'jason0x43/vim-js-indent', { 'for': 'javascript' }
-" Plug 'leafgarland/typescript-vim'
-" Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
 Plug 'othree/jsdoc-syntax.vim', { 'for': ['javascript'] }
-Plug 'mxw/vim-jsx'
 Plug 'Raimondi/delimitMate'
 Plug 'nathanaelkane/vim-indent-guides'
 " Plug 'Lokaltog/vim-easymotion'
@@ -249,13 +248,14 @@ Plug 'NLKNguyen/papercolor-theme'
 " Markdown
 Plug 'godlygeek/tabular', { 'for': ['markdown', 'txt'] }
 Plug 'junegunn/goyo.vim', { 'for': 'markdown' }
-" Plug 'lambdatoast/elm.vim'
 Plug 'marijnh/tern_for_vim', { 'for': ['javascript'], 'do': 'npm install' }
 
 " Tern goodness
 autocmd FileType javascript setlocal omnifunc=tern#Complete
 
 call plug#end()
+
+let g:polyglot_disabled = ['markdown']
 
 let g:tern_map_keys = 1
 
@@ -380,10 +380,6 @@ nnoremap <silent> # #zz
 nnoremap <silent> g* g*zz
 nnoremap <silent> g# g#zz
 
-" Type <Space>o to open a new file
-nnoremap <Leader>o :CtrlP<CR>
-" Type <Space>w to save file (a lot faster than :w<Enter>)
-nnoremap <Leader>w :w<CR>
 " Enter visual line mode with <Space><Space>:
 nmap <Leader><Leader> V
 "Copy & paste to system clipboard with <Space>p and <Space>y:
@@ -400,9 +396,10 @@ nmap <CR> m`o<Esc>``
 " ✠ mapped back to <S-CR> in Vim.
 nmap ✠ m`O<Esc>``
 
+let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+let g:ctrlp_max_files=0
+let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
 let g:ctrlp_working_path_mode = 'r'
-" let g:ctrlp_working_path_mode = 0
-" let g:ctrlp_cmd = 'CtrlPMRU .'
 
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
@@ -465,9 +462,6 @@ au BufEnter *.mli setf ocaml
 set grepprg=ag\ --nogroup\ --nocolor
 nnoremap F :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
-"let g:ctrlp_user_command = "find %s -type f | egrep -v '/\.(git|hg|svn)|solr|tmp/' | egrep -v '\.(png|exe|jpg|gif|jar|class|swp|swo|log|gitkep|keepme|so|o)$'"
-let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-let g:ctrlp_max_files=0
 
 let g:gitgutter_max_signs=3000
 

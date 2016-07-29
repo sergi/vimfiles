@@ -1,6 +1,5 @@
 set nocompatible
 
-
 " }}}
 " Basic options -----------------------------------------------------------
 
@@ -227,6 +226,9 @@ Plug 'terryma/vim-multiple-cursors'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'jason0x43/vim-js-indent', { 'for': 'javascript' }
 Plug 'othree/jsdoc-syntax.vim', { 'for': ['javascript'] }
+Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+Plug 'Quramy/tsuquyomi'
+
 Plug 'Raimondi/delimitMate'
 Plug 'nathanaelkane/vim-indent-guides'
 " Plug 'Lokaltog/vim-easymotion'
@@ -576,3 +578,9 @@ func! WordProcessorMode()
   setlocal linebreak
 endfu
 com! WP call WordProcessorMode()
+
+let g:tsuquyomi_disable_quickfix = 1
+let g:syntastic_typescript_checkers = ['tsuquyomi', 'tslint'] " You shouldn't use 'tsc' checker."
+autocmd FileType typescript nmap <buffer> <Leader>t : <C-u>echo tsuquyomi#hint()<CR>
+autocmd FileType typescript nmap <buffer> <Leader>e <Plug>(TsuquyomiRenameSymbol)
+autocmd FileType typescript nmap <buffer> <Leader>E <Plug>(TsuquyomiRenameSymbolC)

@@ -14,6 +14,9 @@ set splitright          " Make the new window appear on the right
 set autowrite           " Save the file when you switch buffers
 set autoread
 set shiftround          " use multiple of shiftwidth when indenting with '<' and '>'
+set expandtab
+set shiftwidth=2
+set softtabstop=2
 set title               " change the terminal's title
 set linebreak           " only wrap at a character in the breakat option
 set shortmess+=I        " Remove message from when you start vim
@@ -213,11 +216,11 @@ Plug 'Shougo/neosnippet-snippets'
 " Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/syntastic'
-Plug 'tpope/vim-sleuth'
+" Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-surround'
 " Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-ragtag', { 'for': ['html', 'xml', 'pml'] }
+" Plug 'tpope/vim-ragtag', { 'for': ['html', 'xml', 'pml'] }
 Plug 'tpope/vim-unimpaired'
 
 Plug 'sheerun/vim-polyglot'
@@ -225,32 +228,32 @@ Plug 'sheerun/vim-polyglot'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'jason0x43/vim-js-indent', { 'for': 'javascript' }
-Plug 'othree/jsdoc-syntax.vim', { 'for': ['javascript'] }
+" Plug 'othree/jsdoc-syntax.vim', { 'for': ['javascript'] }
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'Quramy/tsuquyomi'
 
 Plug 'Raimondi/delimitMate'
 Plug 'nathanaelkane/vim-indent-guides'
 " Plug 'Lokaltog/vim-easymotion'
-Plug 'justinmk/vim-sneak'
+" Plug 'justinmk/vim-sneak'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'airblade/vim-gitgutter'
+" Plug 'airblade/vim-gitgutter'
 Plug 'ap/vim-css-color'
 " Plug 'panozzaj/vim-autocorrect'
 Plug 'regedarek/ZoomWin'
-Plug 'jpalardy/vim-slime', { 'for': ['clojure', 'scheme', 'ocaml'] }
-Plug 'kovisoft/paredit', { 'for': ['clojure', 'scheme'] }
+" Plug 'jpalardy/vim-slime', { 'for': ['clojure', 'scheme', 'ocaml'] }
+" Plug 'kovisoft/paredit', { 'for': ['clojure', 'scheme'] }
 " Plug 'bling/vim-airline'
 Plug 'itchyny/lightline.vim'
 
-Plug 'wlangstroth/vim-racket', { 'for': ['scheme'] }
-Plug 'kien/rainbow_parentheses.vim', { 'for': ['clojure', 'scheme'] }
+" Plug 'wlangstroth/vim-racket', { 'for': ['scheme'] }
+" Plug 'kien/rainbow_parentheses.vim', { 'for': ['clojure', 'scheme'] }
 Plug 'NLKNguyen/papercolor-theme'
 
 " Markdown
-Plug 'godlygeek/tabular', { 'for': ['markdown', 'txt'] }
-Plug 'junegunn/goyo.vim', { 'for': 'markdown' }
-Plug 'marijnh/tern_for_vim', { 'for': ['javascript'], 'do': 'npm install' }
+" Plug 'godlygeek/tabular', { 'for': ['markdown', 'txt'] }
+" Plug 'junegunn/goyo.vim', { 'for': 'markdown' }
+" Plug 'marijnh/tern_for_vim', { 'for': ['javascript'], 'do': 'npm install' }
 
 " Tern goodness
 autocmd FileType javascript setlocal omnifunc=tern#Complete
@@ -580,6 +583,7 @@ endfu
 com! WP call WordProcessorMode()
 
 let g:tsuquyomi_disable_quickfix = 1
+let g:tsuquyomi_disable_default_mappings = 1
 let g:syntastic_typescript_checkers = ['tsuquyomi', 'tslint'] " You shouldn't use 'tsc' checker."
 autocmd FileType typescript nmap <buffer> <Leader>t : <C-u>echo tsuquyomi#hint()<CR>
 autocmd FileType typescript nmap <buffer> <Leader>e <Plug>(TsuquyomiRenameSymbol)

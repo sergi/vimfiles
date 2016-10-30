@@ -1,5 +1,4 @@
 set nocompatible
-
 " }}}
 " Basic options -----------------------------------------------------------
 
@@ -210,7 +209,6 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.vim/bundle')
-Plug 'Shougo/neocomplete.vim'
 Plug 'Shougo/neosnippet.vim'
 Plug 'Shougo/neosnippet-snippets'
 " Plug 'Shougo/vimproc.vim', {'do' : 'make'}
@@ -241,9 +239,8 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'ap/vim-css-color'
 " Plug 'panozzaj/vim-autocorrect'
 Plug 'regedarek/ZoomWin'
-" Plug 'jpalardy/vim-slime', { 'for': ['clojure', 'scheme', 'ocaml'] }
-" Plug 'kovisoft/paredit', { 'for': ['clojure', 'scheme'] }
-" Plug 'bling/vim-airline'
+Plug 'jpalardy/vim-slime', { 'for': ['clojure', 'scheme', 'ocaml'] }
+Plug 'kovisoft/paredit', { 'for': ['clojure', 'scheme'] }
 Plug 'itchyny/lightline.vim'
 
 " Plug 'wlangstroth/vim-racket', { 'for': ['scheme'] }
@@ -251,9 +248,12 @@ Plug 'itchyny/lightline.vim'
 Plug 'NLKNguyen/papercolor-theme'
 
 " Markdown
+
 " Plug 'godlygeek/tabular', { 'for': ['markdown', 'txt'] }
-" Plug 'junegunn/goyo.vim', { 'for': 'markdown' }
+Plug 'junegunn/goyo.vim', { 'for': 'markdown' }
+Plug 'gabrielelana/vim-markdown'
 " Plug 'marijnh/tern_for_vim', { 'for': ['javascript'], 'do': 'npm install' }
+Plug 'lambdatoast/elm.vim'
 
 " Tern goodness
 autocmd FileType javascript setlocal omnifunc=tern#Complete
@@ -274,10 +274,6 @@ let g:slime_default_config = {"socket_name": "default", "target_pane": "2"}
 
 nnoremap <silent> <leader>bd    :Sbd<CR>
 nnoremap <silent> <leader>bdm   :Sbdm<CR>
-
-" --- type _ to search the word in all files in the current dir
-" nmap _ :Ag <c-r>=expand("<cword>")<cr><cr>
-nnoremap <leader>a :Ag"
 
 inoremap <C-c> <CR><Esc>O
 
@@ -401,7 +397,9 @@ nmap <CR> m`o<Esc>``
 " ✠ mapped back to <S-CR> in Vim.
 nmap ✠ m`O<Esc>``
 
-let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+" let g:ctrlp_user_command = 'rg %s -l -g ""'
+
+let g:ctrlp_user_command = 'rg %s --files -g ""'
 let g:ctrlp_max_files=0
 let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
 let g:ctrlp_working_path_mode = 'r'
@@ -422,6 +420,9 @@ let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '!'
 " highlight SyntasticErrorSign guifg=red guibg=red
 " highlight SyntasticError guibg=#2f0000
+
+
+let g:syntastic_html_checkers = ['htmlhint', 'htmltidy']
 
 let g:syntastic_ocaml_use_ocamlc = 1
 
@@ -535,7 +536,6 @@ inoremap kj <esc>
 " let g:airline#extensions#syntastic#enabled = 1
 " let g:airline#extensions#hunks#enabled = 1
 let delimitMate_expand_cr = 2
-let g:neocomplete#enable_at_startup = 1
 let g:EditorConfig_core_mode = 'external_command'
 let g:jsx_ext_required = 0 " Allow JSX in normal JS files"
 let NERDSpaceDelims=1 " Add whitespace before comment
@@ -558,16 +558,15 @@ smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
   " set conceallevel=2 concealcursor=niv
 " endif
 
-function! Multiple_cursors_before()
-  exe 'NeoCompleteLock'
-  echo 'Disabled autocomplete'
-endfunction
+" function! Multiple_cursors_before()
+  " exe 'NeoCompleteLock'
+  " echo 'Disabled autocomplete'
+" endfunction
 
-function! Multiple_cursors_after()
-  exe 'NeoCompleteUnlock'
-  echo 'Enabled autocomplete'
-endfunction
-
+" function! Multiple_cursors_after()
+  " exe 'NeoCompleteUnlock'
+  " echo 'Enabled autocomplete'
+" endfunction
 
 func! WordProcessorMode()
   setlocal formatoptions=cqt
@@ -588,3 +587,11 @@ let g:syntastic_typescript_checkers = ['tsuquyomi', 'tslint'] " You shouldn't us
 autocmd FileType typescript nmap <buffer> <Leader>t : <C-u>echo tsuquyomi#hint()<CR>
 autocmd FileType typescript nmap <buffer> <Leader>e <Plug>(TsuquyomiRenameSymbol)
 autocmd FileType typescript nmap <buffer> <Leader>E <Plug>(TsuquyomiRenameSymbolC)
+
+set autoread
+au CursorHold * checktime
+
+noremap <Up> <nop>
+noremap <Down> <nop>
+noremap <Left> <nop>
+noremap <Right> <nop>

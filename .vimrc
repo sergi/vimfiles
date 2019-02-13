@@ -124,10 +124,8 @@ set cursorline          " highlight current line"
 "set cmdheight=2
 set number              " show line numbers"
 set numberwidth=5
-set background=dark
+set background=light
 set mouse=a
-" Set xterm2 mouse mode to allow resizing of splits with mouse inside Tmux.
-set ttymouse=xterm2
 set mousehide
 set ttyfast
 set fileformats+=mac "add mac to auto-detection of file format line endings
@@ -211,10 +209,8 @@ endif
 call plug#begin('~/.vim/bundle')
 Plug 'Shougo/neosnippet.vim'
 Plug 'Shougo/neosnippet-snippets'
-" Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/syntastic'
-" Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-surround'
 " Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
@@ -226,34 +222,23 @@ Plug 'sheerun/vim-polyglot'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'jason0x43/vim-js-indent', { 'for': 'javascript' }
-" Plug 'othree/jsdoc-syntax.vim', { 'for': ['javascript'] }
-Plug 'Shougo/vimproc.vim', {'do' : 'make'}
-Plug 'Quramy/tsuquyomi'
+" Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 
-Plug 'Raimondi/delimitMate'
 Plug 'nathanaelkane/vim-indent-guides'
-" Plug 'Lokaltog/vim-easymotion'
-" Plug 'justinmk/vim-sneak'
+Plug 'Lokaltog/vim-easymotion'
 Plug 'christoomey/vim-tmux-navigator'
-" Plug 'airblade/vim-gitgutter'
+Plug 'airblade/vim-gitgutter'
 Plug 'ap/vim-css-color'
-" Plug 'panozzaj/vim-autocorrect'
 Plug 'regedarek/ZoomWin'
-Plug 'jpalardy/vim-slime', { 'for': ['clojure', 'scheme', 'ocaml'] }
-Plug 'kovisoft/paredit', { 'for': ['clojure', 'scheme'] }
 Plug 'itchyny/lightline.vim'
 
-" Plug 'wlangstroth/vim-racket', { 'for': ['scheme'] }
-" Plug 'kien/rainbow_parentheses.vim', { 'for': ['clojure', 'scheme'] }
-Plug 'NLKNguyen/papercolor-theme'
-
-" Markdown
+" Plug 'NLKNguyen/papercolor-theme'
 
 " Plug 'godlygeek/tabular', { 'for': ['markdown', 'txt'] }
-Plug 'junegunn/goyo.vim', { 'for': 'markdown' }
-Plug 'gabrielelana/vim-markdown'
-" Plug 'marijnh/tern_for_vim', { 'for': ['javascript'], 'do': 'npm install' }
-Plug 'lambdatoast/elm.vim'
+" Plug 'plasticboy/vim-markdown'
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
+Plug 'junegunn/seoul256.vim'
 
 " Tern goodness
 autocmd FileType javascript setlocal omnifunc=tern#Complete
@@ -268,9 +253,6 @@ let g:tern_show_argument_hints = 'on_hold'
 let g:sneak#streak = 1
 
 let g:netrw_liststyle=3
-
-let g:slime_target = "tmux"
-let g:slime_default_config = {"socket_name": "default", "target_pane": "2"}
 
 nnoremap <silent> <leader>bd    :Sbd<CR>
 nnoremap <silent> <leader>bdm   :Sbdm<CR>
@@ -331,31 +313,10 @@ iab JAvaScript JavaScript
 " for mistyping :w as :W
 command! W :w
 set t_Co=256
-colorscheme PaperColor
+" colorscheme PaperColor
+colo seoul256-light
+
 " let g:hybrid_use_Xresources = 1
-
-" Rainbox Parentheses {{{
-
-nnoremap <leader>R :RainbowParenthesesToggle<cr>
-let g:rbpt_colorpairs = [
-      \ ['brown',       'RoyalBlue3'],
-      \ ['Darkblue',    'SeaGreen3'],
-      \ ['darkgray',    'DarkOrchid3'],
-      \ ['darkgreen',   'firebrick3'],
-      \ ['darkcyan',    'RoyalBlue3'],
-      \ ['darkred',     'SeaGreen3'],
-      \ ['darkmagenta', 'DarkOrchid3'],
-      \ ['brown',       'firebrick3'],
-      \ ['gray',        'RoyalBlue3'],
-      \ ['black',       'SeaGreen3'],
-      \ ['darkmagenta', 'DarkOrchid3'],
-      \ ['Darkblue',    'firebrick3'],
-      \ ['darkgreen',   'RoyalBlue3'],
-      \ ['darkcyan',    'SeaGreen3'],
-      \ ['darkred',     'DarkOrchid3'],
-      \ ['red',         'firebrick3'],
-      \ ]
-let g:rbpt_max = 16
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -444,8 +405,6 @@ au CursorHoldI * stopinsert
 
 set omnifunc=syntaxcomplete#Complete
 map <Leader> <Plug>(easymotion-prefix)
-
-set term=screen-256color
 
 map <silent> <F8>   :Explore<CR>
 map <silent> <S-F8> :sp +Explore<CR>
@@ -595,3 +554,6 @@ noremap <Up> <nop>
 noremap <Down> <nop>
 noremap <Left> <nop>
 noremap <Right> <nop>
+
+autocmd! User GoyoEnter Limelight
+autocmd! User GoyoLeave Limelight!

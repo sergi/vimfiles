@@ -124,7 +124,6 @@ set cursorline          " highlight current line"
 "set cmdheight=2
 set number              " show line numbers"
 set numberwidth=5
-set background=light
 set mouse=a
 set mousehide
 set ttyfast
@@ -142,7 +141,6 @@ set t_ti= t_te=
 " Behaviors
 " ---------------
 syntax enable
-"set autoread " Automatically reload changes if detected
 set wildmenu " visual autocomplete for command menu
 set hidden " Change buffer - without saving
 set cf " Enable error files & error jumping.
@@ -219,26 +217,24 @@ let g:deoplete#enable_at_startup = 1
 Plug 'Shougo/neosnippet.vim'
 Plug 'Shougo/neosnippet-snippets'
 Plug 'scrooloose/nerdcommenter'
-Plug 'scrooloose/syntastic'
 Plug 'tpope/vim-surround'
-" Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 " Plug 'tpope/vim-ragtag', { 'for': ['html', 'xml', 'pml'] }
-Plug 'tpope/vim-unimpaired'
-
+" Plug 'tpope/vim-unimpaired'
 Plug 'sheerun/vim-polyglot'
-
 Plug 'terryma/vim-multiple-cursors'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'jason0x43/vim-js-indent', { 'for': 'javascript' }
 " Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+Plug 'neomake/neomake'
 
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'airblade/vim-gitgutter'
 Plug 'ap/vim-css-color'
-Plug 'regedarek/ZoomWin'
+" Plug 'regedarek/ZoomWin'
 Plug 'itchyny/lightline.vim'
 
 " Plug 'NLKNguyen/papercolor-theme'
@@ -247,7 +243,8 @@ Plug 'itchyny/lightline.vim'
 " Plug 'plasticboy/vim-markdown'
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
-Plug 'junegunn/seoul256.vim'
+" Plug 'junegunn/seoul256.vim'
+Plug 'altercation/vim-colors-solarized'
 
 " Clojure
 Plug 'kien/rainbow_parentheses.vim'
@@ -260,16 +257,11 @@ Plug 'tpope/vim-sexp-mappings-for-regular-people'
 Plug 'fbeline/kibit-vim'
 
 
-" Tern goodness
-autocmd FileType javascript setlocal omnifunc=tern#Complete
 
 call plug#end()
 
 let g:polyglot_disabled = ['markdown']
 
-let g:tern_map_keys = 1
-
-let g:tern_show_argument_hints = 'on_hold'
 let g:sneak#streak = 1
 
 let g:netrw_liststyle=3
@@ -332,10 +324,7 @@ iab JAvaScript JavaScript
 
 " for mistyping :w as :W
 command! W :w
-set t_Co=256
-" colorscheme PaperColor
-" colo seoul256-light
-colo seoul256
+colorscheme solarized
 
 " let g:hybrid_use_Xresources = 1
 
@@ -387,26 +376,8 @@ let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
 let g:ctrlp_working_path_mode = 'r'
 
 set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
-
-"let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_enable_signs=1
-let g:syntastic_javascript_checkers = ['eslint', 'gjslint']
-"let g:syntastic_javascript_eslint_exec = 'eslint_d'
-let g:syntastic_javascript_gjslint_args="--nojsdoc"
-let g:syntastic_error_symbol = '✗'
-let g:syntastic_warning_symbol = '!'
-" highlight SyntasticErrorSign guifg=red guibg=red
-" highlight SyntasticError guibg=#2f0000
-
-
-let g:syntastic_html_checkers = ['htmlhint', 'htmltidy']
-
-let g:syntastic_ocaml_use_ocamlc = 1
 
 if exists('$ITERM_PROFILE')
   if exists('$TMUX')
@@ -448,17 +419,7 @@ au BufEnter *.mli setf ocaml
 set grepprg=ag\ --nogroup\ --nocolor
 nnoremap F :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
-
 let g:gitgutter_max_signs=3000
-
-" PML file settings
-augroup filetype_pml
-    autocmd!
-    au BufNewFile,BufRead *.pml set ft=xml
-    autocmd FileType pml  set ft=xml
-    autocmd FileType pml call AutoCorrect()
-    au BufRead,BufNewFile *.pml setlocal spell
-augroup END
 
 " Omni Completion settings
 set completeopt=longest,menuone
@@ -488,11 +449,6 @@ endfunction
 command! PasteWithPasteMode call PasteWithPasteMode()
 nnoremap <silent> <leader>p :PasteWithPasteMode<CR>
 
-"Append this to your .vimrc to add merlin to vim's runtime-path:
-" let g:opamshare = substitute(system('opam config var share'),'\n$','','')
-" execute "set rtp+=" . g:opamshare . "/merlin/vim"
-
-" let g:syntastic_ocaml_checkers = ['merlin']
 
 if $TMUX == ''
   set clipboard+=unnamed
@@ -525,29 +481,6 @@ imap <C-k>     <Plug>(neosnippet_expand_or_jump)
 smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 xmap <C-k>     <Plug>(neosnippet_expand_target)
 
-" SuperTab like snippets behavior.
-imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)"
-\: pumvisible() ? "\<C-n>" : "\<TAB>"
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)"
-\: "\<TAB>"
-
-" For conceal markers.
-" if has('conceal')
-  " set conceallevel=2 concealcursor=niv
-" endif
-
-" function! Multiple_cursors_before()
-  " exe 'NeoCompleteLock'
-  " echo 'Disabled autocomplete'
-" endfunction
-
-" function! Multiple_cursors_after()
-  " exe 'NeoCompleteUnlock'
-  " echo 'Enabled autocomplete'
-" endfunction
-
 func! WordProcessorMode()
   setlocal formatoptions=cqt
   map j gj
@@ -561,14 +494,6 @@ func! WordProcessorMode()
 endfu
 com! WP call WordProcessorMode()
 
-let g:tsuquyomi_disable_quickfix = 1
-let g:tsuquyomi_disable_default_mappings = 1
-let g:syntastic_typescript_checkers = ['tsuquyomi', 'tslint'] " You shouldn't use 'tsc' checker."
-autocmd FileType typescript nmap <buffer> <Leader>t : <C-u>echo tsuquyomi#hint()<CR>
-autocmd FileType typescript nmap <buffer> <Leader>e <Plug>(TsuquyomiRenameSymbol)
-autocmd FileType typescript nmap <buffer> <Leader>E <Plug>(TsuquyomiRenameSymbolC)
-
-set autoread
 au CursorHold * checktime
 
 noremap <Up> <nop>
@@ -583,3 +508,11 @@ au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
+
+" Enable true color support
+" set termguicolors
+"
+autocmd! BufWritePost,BufEnter * Neomake
+" let g:neomake_javascript_enabled_makers = ['eslint']
+" let g:neomake_scss_enabled_makers = ['scss_lint']
+let g:neomake_python_enabled_makers = ['pylint', 'python']
